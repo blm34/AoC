@@ -16,3 +16,6 @@ for i, char in enumerate(text):
 
 print(f'Part 1: {p1}')
 print(f'Part 2: {p2}')
+
+assert p1 == 280
+assert p2 == 1797
