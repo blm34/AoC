@@ -25,3 +25,5 @@
 25.txt
 __pycache__/
 *~
+*.swp
+tmp/
