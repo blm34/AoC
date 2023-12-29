@@ -1,3 +1,6 @@
+import time
+START_TIME = time.time()
+
 import Modules
 import sys
 
@@ -12,5 +15,8 @@ C = len(G[0])
 
 
 
+END_TIME = time.time()
+RUN_TIME = int(1000 * round(END_TIME - START_TIME, 3))
 print(f'Part 1: {p1}')
 print(f'Part 2: {p2}')
+print(f'Run time: {RUN_TIME} ms')
