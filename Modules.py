@@ -120,5 +120,26 @@ def dijkstra(G, a, b=None):
         paths[vert] = path
     return dists, paths
 
-def optimal_hamiltonian(G, eval_func, opt_func):
-    pass
+def optimal_hamiltonian(G, eval_func=lambda G,p:sum(G[p[i]][p[i+1]] for i in range(len(p)-1)), opt_func=min):
+    '''
+    Return the hamiltonian path that optimises the value of eval_func performed on the path (default sum of weights) with the optimisations defined by opt_func (default minimum)
+
+    Parameters
+    ----------
+    G : dict
+        A dictionary containing dictionaries for each vertex, each representing an edge e.g. {v1:{v2:3, v3:4}, v2:{v1:3}, v3:{v1:4}}
+    eval_func : function
+        Takes two parameters (G, path) and calculates a score for the path through G (default: sum of weights)
+    opt_func : function
+        Returns the optimal value from an iterable of ints (default: min)
+    '''
+    def dfs(path):
+        '''
+        Iteratively perform a depth first search to find all hamiltonian paths
+        '''
+        vert = path[-1]
+        if len(path) == len(G):
+            return eval_func(G, path)
+        return opt_func(dfs(path+[neigh]) for neigh in G[vert] if neigh not in path)
+    
+    return opt_func(dfs([start_vert]) for start_vert in G)
