@@ -1,8 +1,7 @@
 import time
-START_TIME = time.time()
-
 import Modules
 import sys
+START_TIME = time.time()
 
 p1 = 0
 p2 = 0
