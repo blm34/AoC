@@ -143,3 +143,18 @@ def optimal_hamiltonian(G, eval_func=lambda G,p:sum(G[p[i]][p[i+1]] for i in ran
         return opt_func(dfs(path+[neigh]) for neigh in G[vert] if neigh not in path)
     
     return opt_func(dfs([start_vert]) for start_vert in G)
+
+def prod(nums):
+    '''
+    Calculate the product of numbers in an iterable
+
+    Parameters
+    ----------
+    nums : iterable
+        An iterable containing numbers
+
+    Returns : number
+        The product of all numbers in nums
+    '''
+    from numpy import prod as product
+    return product(nums)
