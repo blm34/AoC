@@ -15,7 +15,7 @@ C = len(G[0])
 
 
 END_TIME = time.time()
-RUN_TIME = round(1000*(END_TIME - START_TIME), 3)
+RUN_TIME = END_TIME - START_TIME
 print(f'Part 1: {p1}')
 print(f'Part 2: {p2}')
-print(f'Run time: {RUN_TIME} ms')
+print(f'Run time: {1000*RUN_TIME:.3f} ms')
