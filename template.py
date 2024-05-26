@@ -8,7 +8,11 @@ START_TIME = time.time()
 p1 = 0
 p2 = 0
 
+<<<<<<< HEAD
 input_text = aoc_helper.read_input(sys.argv[1])
+=======
+input_text = Modules.read_input(sys.argv[1])
+>>>>>>> 16d76d3 (Update docstrings of helper modules)
 L = input_text.split('\n')
 G = [list(line) for line in L]
 R = len(G)
