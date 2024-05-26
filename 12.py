@@ -4,7 +4,7 @@ START_TIME = time.time()
 import Modules
 import sys
 
-text = Modules.readInput(sys.argv[1]) 
+text = Modules.read_input(sys.argv[1])
 
 def count_nums(text):
     '''Sum the total of all the nums in a string of text'''

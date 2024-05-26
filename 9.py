@@ -1,7 +1,7 @@
 import Modules
 import sys
 
-text = Modules.readInput(sys.argv[1]) 
+text = Modules.read_input(sys.argv[1])
 L = text.split('\n')
 
 # Generate graph

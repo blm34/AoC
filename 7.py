@@ -2,7 +2,7 @@ import Modules
 import sys
 from collections import deque
 
-text = Modules.readInput(sys.argv[1]) 
+text = Modules.read_input(sys.argv[1])
 L = text.split('\n')
 
 def get_instructions(lines):

@@ -4,7 +4,7 @@ START_TIME = time.time()
 import Modules
 import sys
 
-text = Modules.readInput(sys.argv[1]) 
+text = Modules.read_input(sys.argv[1])
 L = text.split('\n')
 
 def gen_input(L):

@@ -4,7 +4,7 @@ START_TIME = time.time()
 
 p2 = 0
 
-text = Modules.readInput("19.txt")
+text = Modules.read_input("19.txt")
 
 replacements_text, molecule = text.split('\n\n')
 

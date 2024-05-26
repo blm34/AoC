@@ -1,7 +1,7 @@
 import Modules
 import sys
 
-text = Modules.readInput(sys.argv[1]) 
+text = Modules.read_input(sys.argv[1])
 
 move_dict = {
         '^':(0, 1),

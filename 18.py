@@ -4,7 +4,7 @@ from copy import deepcopy
 
 START_TIME = time.time()
 
-text = Modules.readInput("18.txt")
+text = Modules.read_input("18.txt")
 L = text.split('\n')
 G = [list(line) for line in L]
 R = len(G)

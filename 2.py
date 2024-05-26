@@ -5,7 +5,7 @@ from numpy import prod
 p1 = 0
 p2 = 0
 
-text = Modules.readInput(sys.argv[1]) 
+text = Modules.read_input(sys.argv[1])
 
 for line in text.split('\n'):
     dims = [int(x) for x in line.split('x')]

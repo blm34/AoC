@@ -4,7 +4,7 @@ import sys
 p1 = 0
 p2 = 0
 
-text = Modules.readInput(sys.argv[1]) 
+text = Modules.read_input(sys.argv[1])
 
 for i, char in enumerate(text):
     if char == '(':

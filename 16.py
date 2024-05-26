@@ -3,7 +3,7 @@ import Modules
 
 START_TIME = time.time()
 
-text = Modules.readInput("16.txt")
+text = Modules.read_input("16.txt")
 L = text.split('\n')
 
 target = {
