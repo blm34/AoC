@@ -2,7 +2,7 @@ import time
 import aoc_helper
 START_TIME = time.time()
 
-text = aoc_helper.read_input("19.txt")
+text = aoc_helper.read_input(day=19, year=2015)
 
 replacements_text, molecule = text.split('\n\n')
 
