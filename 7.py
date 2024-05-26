@@ -1,8 +1,8 @@
-import Modules
+import aoc_helper
 import sys
 from collections import deque
 
-text = Modules.read_input(sys.argv[1])
+text = aoc_helper.read_input(sys.argv[1])
 L = text.split('\n')
 
 def get_instructions(lines):

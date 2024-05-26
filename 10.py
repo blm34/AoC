@@ -1,10 +1,10 @@
 import time
 START_TIME = time.time()
 
-import Modules
+import aoc_helper
 import sys
 
-text = Modules.read_input(sys.argv[1])
+text = aoc_helper.read_input(sys.argv[1])
 
 def las(num):
     '''Return the next number in the look-and-see sequence'''

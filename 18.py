@@ -1,10 +1,10 @@
 import time
-import Modules
+import aoc_helper
 from copy import deepcopy
 
 START_TIME = time.time()
 
-text = Modules.read_input("18.txt")
+text = aoc_helper.read_input("18.txt")
 L = text.split('\n')
 G = [list(line) for line in L]
 R = len(G)

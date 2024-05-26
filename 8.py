@@ -1,10 +1,10 @@
-import Modules
+import aoc_helper
 import sys
 
 p1 = 0
 p2 = 0
 
-text = Modules.read_input(sys.argv[1])
+text = aoc_helper.read_input(sys.argv[1])
 L = text.split('\n')
 
 for line in L:

@@ -1,9 +1,9 @@
 import time
-import Modules
+import aoc_helper
 
 START_TIME = time.time()
 
-text = Modules.read_input('17.txt')
+text = aoc_helper.read_input('17.txt')
 L = text.split('\n')
 
 containers = [int(x) for x in L]

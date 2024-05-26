@@ -1,16 +1,15 @@
-import Modules
+import aoc_helper
 import sys
-from numpy import prod
 
 p1 = 0
 p2 = 0
 
-text = Modules.read_input(sys.argv[1])
+text = aoc_helper.read_input("2.txt")
 
 for line in text.split('\n'):
     dims = [int(x) for x in line.split('x')]
     areas = [dims[i]*dims[(i+1)%3] for i in range(3)]
-    volume = prod(dims)
+    volume = aoc_helper.prod(dims)
     min_circ = (sum(dims)-max(dims))*2
     p1 += 2 * sum(areas) + min(areas)
     p2 += volume + min_circ

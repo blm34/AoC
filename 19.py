@@ -1,10 +1,10 @@
 import time
-import Modules
+import aoc_helper
 START_TIME = time.time()
 
 p2 = 0
 
-text = Modules.read_input("19.txt")
+text = aoc_helper.read_input("19.txt")
 
 replacements_text, molecule = text.split('\n\n')
 

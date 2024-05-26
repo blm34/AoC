@@ -1,11 +1,11 @@
-import Modules
+import aoc_helper
 import sys
 from hashlib import md5
 
 p1 = 0
 p2 = 0
 
-text = Modules.read_input(sys.argv[1])
+text = aoc_helper.read_input(sys.argv[1])
 
 num = 0
 while True:

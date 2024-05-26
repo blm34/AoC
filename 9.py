@@ -1,7 +1,7 @@
-import Modules
+import aoc_helper
 import sys
 
-text = Modules.read_input(sys.argv[1])
+text = aoc_helper.read_input(sys.argv[1])
 L = text.split('\n')
 
 # Generate graph

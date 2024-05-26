@@ -1,7 +1,7 @@
-import Modules
+import aoc_helper
 import sys
 
-text = Modules.read_input(sys.argv[1])
+text = aoc_helper.read_input(sys.argv[1])
 
 move_dict = {
         '^':(0, 1),

@@ -1,9 +1,9 @@
 import time
-import Modules
+import aoc_helper
 import sys
 START_TIME = time.time()
 
-text = Modules.read_input(sys.argv[1])
+text = aoc_helper.read_input(sys.argv[1])
 L = text.split('\n')
 
 def gen_graph(L):

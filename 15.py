@@ -1,12 +1,12 @@
 import time
-import Modules
+import aoc_helper
 import sys
 START_TIME = time.time()
 
 p1 = 0
 p2 = 0
 
-text = Modules.read_input(sys.argv[1])
+text = aoc_helper.read_input(sys.argv[1])
 L = text.split('\n')
 
 # Calculate the score for a recipe

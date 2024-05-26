@@ -1,53 +1,5 @@
 import heapq
-from numpy import prod as product
-from typing import Iterable, Callable
-
-
-def read_input(file: str) -> str:
-    """
-    Opens the given file. Typically a puzzle input
-
-    Args:
-        file: The file to open
-
-    Returns:
-        The contents of the file
-    """
-    with open(f'input_files\\{file}', 'r') as file:
-        text = file.read().strip()
-    return text
-
-
-def gcd(a: int, b: int) -> int:
-    """
-    Calculates the greatest common divisor using the Euclidean algorithm
-
-    Args:
-        a: The first number
-        b: The second number
-
-    Returns:
-        The gcd of a and b
-    """
-    while b != 0:
-        a, b = b, a % b
-    return a
-
-
-def lcm(nums: Iterable[int]) -> int:
-    """
-    Calculates the lowest common multiple of an iterable of numbers
-
-    Args:
-        nums: Iterable of ints of which to find the lowest common multiple
-
-    Returns:
-        The lowest common multiple of the ints
-    """
-    ans = 1
-    for num in nums:
-        ans = ans // gcd(num, ans) * num
-    return ans
+from typing import Callable
 
 
 def dijkstra(G: dict, start_node, target_node=None):
@@ -130,16 +82,3 @@ def optimal_hamiltonian(G: dict,
         return opt_func(dfs(path + [neigh]) for neigh in G[vert] if neigh not in path)
 
     return opt_func(dfs([start_vert]) for start_vert in G)
-
-
-def prod(nums: Iterable[int | float]):
-    """
-    Calculate the product of numbers in an iterable
-
-    Args:
-        nums: An iterable containing numbers
-
-    Returns:
-        The product of all numbers in nums
-    """
-    return product(nums)

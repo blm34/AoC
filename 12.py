@@ -1,10 +1,10 @@
 import time
 START_TIME = time.time()
 
-import Modules
+import aoc_helper
 import sys
 
-text = Modules.read_input(sys.argv[1])
+text = aoc_helper.read_input(sys.argv[1])
 
 def count_nums(text):
     '''Sum the total of all the nums in a string of text'''
