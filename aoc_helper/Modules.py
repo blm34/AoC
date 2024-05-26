@@ -12,7 +12,7 @@ def readInput(file):
     str
         String of the file contents
     '''
-    with open(f'{file}', 'r') as file:
+    with open(f'input_files\\{file}', 'r') as file:
         text = file.read().strip()
     return text
 
