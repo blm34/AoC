@@ -55,6 +55,4 @@ p2 = step_count(molecule)
 
 END_TIME = time.time()
 RUN_TIME = END_TIME - START_TIME
-print(f'Part 1: {p1}')
-print(f'Part 2: {p2}')
-print(f'Run time: {1000*RUN_TIME:.3f} ms')
+aoc_helper.print_results(p1, p2, END_TIME-START_TIME)
