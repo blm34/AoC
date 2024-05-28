@@ -1,7 +1,8 @@
 from pathlib import Path
 
-import browser_cookie3 as bc3
 import requests
+
+from .cookies import get_cookies
 
 
 def read_input(day: int, year: int) -> str:
@@ -40,10 +41,6 @@ def download_input(day: int, year: int) -> str:
     Returns:
         The puzzle input for the given day
     """
-    cookies = bc3.firefox(domain_name=".adventofcode.com")
-    if not (".adventofcode.com" in str(cookies)):
-        input("Cookie not in Firefox. Temporarily Close chrome then press enter to continue")
-        cookies = bc3.chrome(domain_name=".adventofcode.com")
-        print("You may now reopen Chrome")
+    cookies = get_cookies()
     r = requests.get(f"https://adventofcode.com/{year}/day/{day}/input", cookies=cookies)
     return r.text
