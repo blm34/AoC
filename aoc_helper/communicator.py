@@ -1,5 +1,7 @@
 from pathlib import Path
 import json
+from dataclasses import dataclass
+import time
 
 import requests
 import browser_cookie3 as bc3
@@ -129,6 +131,11 @@ class Communicator:
         with open(path, 'w') as file:
             json.dump(answers, file)
 
+@dataclass
+class AocResult:
+    answer: int | str
+    correct: bool
+    time: float
 
 def communicator(year: int, day: int, level: int):
     def decorator(func):
@@ -136,8 +143,10 @@ def communicator(year: int, day: int, level: int):
 
         def new_func():
             input_data = comm.get_input(year, day)
+            start_time = time.time()
             answer = func(input_data)
+            end_time = time.time()
             check = comm.check_answer(answer, year, day, level)
-            return answer, check
+            return AocResult(answer=answer, correct=check, time=end_time-start_time)
         return new_func
     return decorator

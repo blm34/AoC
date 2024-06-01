@@ -1,14 +1,14 @@
 import aoc_helper
-import sys
 
-p1 = 0
-p2 = 0
 
-text = aoc_helper.read_input(sys.argv[1])
-L = text.split('\n')
-G = [list(line) for line in L]
-R = len(G)
-C = len(G[0])
+DAY = 5
+YEAR = 2015
+
+
+def parse_input(input_text):
+    L = input_text.split("\n")
+    return L
+
 
 def nice(string):
     # Constants
@@ -45,12 +45,28 @@ def nice2(string):
             break
     return rep_let and two_pair
 
-for string in L:
-    p1 += nice(string)
-    p2 += nice2(string)
 
-print(f'Part 1: {p1}')
-print(f'Part 2: {p2}')
+@aoc_helper.communicator(YEAR, DAY, 1)
+def p1(input_text):
+    strings = parse_input(input_text)
+    ans = 0
+    for string in strings:
+        ans += nice(string)
+    return ans
 
-assert p1 == 238
-assert p2 == 69
+
+@aoc_helper.communicator(YEAR, DAY, 2)
+def p2(input_text):
+    strings = parse_input(input_text)
+    ans = 0
+    for string in strings:
+        ans += nice2(string)
+    return ans
+
+
+if __name__ == "__main__":
+    p1_res = p1()
+    aoc_helper.print_results(p1_res, part=1)
+
+    p2_res = p2()
+    aoc_helper.print_results(p2_res, part=2)

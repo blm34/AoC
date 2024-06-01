@@ -1,34 +1,41 @@
-import aoc_helper
-import sys
 from collections import deque
 
-text = aoc_helper.read_input(sys.argv[1])
-L = text.split('\n')
+import aoc_helper
+
+DAY = 7
+YEAR = 2015
+
+
+def parse_input(input_text):
+    L = input_text.split("\n")
+    return L
+
 
 def get_instructions(lines):
-    '''Take the lines from the input and convert them into a deque of operations to perform'''
+    """Take the lines from the input and convert them into a deque of operations to perform"""
     Q = deque()
-    for line in L:
+    for line in lines:
         instruction, destination = line.split(' -> ')
         instruction = instruction.split()
         if len(instruction) == 1:
-            Q.append(['EQUAL', [instruction[0],], None, destination])
+            Q.append(['EQUAL', [instruction[0], ], None, destination])
         elif instruction[1] == 'AND':
             Q.append(['AND', [instruction[0], instruction[2]], None, destination])
         elif instruction[1] == 'OR':
             Q.append(['OR', [instruction[0], instruction[2]], None, destination])
         elif instruction[1] == 'LSHIFT':
-            Q.append(['LSHIFT', [instruction[0],], instruction[2], destination])
+            Q.append(['LSHIFT', [instruction[0], ], instruction[2], destination])
         elif instruction[1] == 'RSHIFT':
-            Q.append(['RSHIFT', [instruction[0],], instruction[2], destination])
+            Q.append(['RSHIFT', [instruction[0], ], instruction[2], destination])
         elif instruction[0] == 'NOT':
-            Q.append(['NOT', [instruction[1],], None, destination])
+            Q.append(['NOT', [instruction[1], ], None, destination])
         else:
             assert False
     return Q
 
+
 def run_instructions(Q):
-    '''Take a deque of instructions to perform, perform them, return the resulting value of a'''
+    """Take a deque of instructions to perform, perform them, return the resulting value of a"""
     calculated = dict()
     while Q:
         # Take next instruction in queue
@@ -62,25 +69,34 @@ def run_instructions(Q):
         elif operation == 'RSHIFT':
             calculated[destination] = inps[0] >> int(amount)
         elif operation == 'NOT':
-            calculated[destination] = ~inps[0] + 2**16
+            calculated[destination] = ~inps[0] + 2 ** 16
         else:
             assert False
     return calculated['a']
 
-# Part 1
-Q = get_instructions(L)
-p1 = run_instructions(Q)
 
-# Part 2
-Q = get_instructions(L)
-for i in range(len(Q)):
-    if Q[i][3] == 'b':
-        Q[i][1] = [str(p1)]
-        break
-p2 = run_instructions(Q)
+@aoc_helper.communicator(YEAR, DAY, 1)
+def p1(input_text):
+    L = parse_input(input_text)
+    Q = get_instructions(L)
+    return run_instructions(Q)
 
-print(f'Part 1: {p1}')
-print(f'Part 2: {p2}')
 
-assert p1 == 3176
-assert p2 == 14710
+@aoc_helper.communicator(YEAR, DAY, 2)
+def p2(input_text):
+    L = parse_input(input_text)
+    Q = get_instructions(L)
+    for i in range(len(Q)):
+        if Q[i][3] == 'b':
+            p1_ans = p1().answer
+            Q[i][1] = [str(p1_ans)]
+            break
+    return run_instructions(Q)
+
+
+if __name__ == "__main__":
+    p1_res = p1()
+    aoc_helper.print_results(p1_res, part=1)
+
+    p2_res = p2()
+    aoc_helper.print_results(p2_res, part=2)
