@@ -35,7 +35,7 @@ class Communicator:
 
     def get_root_folder(self):
         path = Path().absolute()
-        while path.name != "2015":
+        while path.name != "AoC":
             path = path.parent
         return path
 
@@ -50,7 +50,7 @@ class Communicator:
         Returns:
             The contents of the file
         """
-        filepath = Path.joinpath(self._root_folder, "input_files", f"{day}.txt")
+        filepath = Path.joinpath(self._root_folder, "input_files", f"day{day}.txt")
 
         if not filepath.exists():
             puzzle_input = self.download_input(year, day)
