@@ -50,7 +50,7 @@ class Communicator:
         Returns:
             The contents of the file
         """
-        filepath = Path.joinpath(self._root_folder, "input_files", f"day{day}.txt")
+        filepath = Path.joinpath(self._root_folder, "input_files", f"{year}", f"day{day}.txt")
 
         if not filepath.exists():
             puzzle_input = self.download_input(year, day)
