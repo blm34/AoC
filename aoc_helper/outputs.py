@@ -1,7 +1,14 @@
-def print_results(p1, p2, time):
-    print(f'Part 1: {p1}\nPart 2: {p2}')
-    
-    if time < 1:
-        print(f"Run time: {1000 * time:.3f} ms")
-    else:
-        print(f"Run time: {time:.1f} s")
+def print_results(p1, p2, time=None):
+    output = f"Part 1: {p1[0]:<10}"
+    output += "✅" if p1[1] else "❌"
+    output += "\n"
+
+    output += f"Part 2: {p2[0]:<10}"
+    output += "✅" if p2[1] else "❌"
+    output += "\n"
+
+    if time is not None:
+        output += "\nRun time: "
+        output += f"{1000 * time:.3f} ms" if time < 1 else f"{time:.1f} s"
+
+    print(output)

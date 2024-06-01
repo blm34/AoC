@@ -1,6 +1,4 @@
 input_files/
+answers/
 __pycache__/
-*~
-*.swp
-tmp/
 .idea/

@@ -1,4 +1,4 @@
 from .graphs import *
 from .maths import *
-from .website_interaction import *
+from .communicator import communicator
 from .outputs import *

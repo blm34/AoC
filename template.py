@@ -2,19 +2,40 @@ import time
 
 import aoc_helper
 
+DAY = None
+YEAR = None
 START_TIME = time.time()
-DAY = 0
-
-p1 = 0
-p2 = 0
-
-input_text = aoc_helper.read_input(day=DAY, year=2015)
-L = input_text.split('\n')
-G = [list(line) for line in L]
-R = len(G)
-C = len(G[0])
 
 
+def parse_input(input_text):
+    L = input_text.split('\n')
+    G = [list(line) for line in L]
+    R = len(G)
+    C = len(G[0])
+    return None
 
-END_TIME = time.time()
-aoc_helper.print_results(p1, p2, END_TIME-START_TIME)
+
+@aoc_helper.communicator(YEAR, DAY, 1)
+def p1(input_text):
+    L = input_text.split('\n')
+    G = [list(line) for line in L]
+    R = len(G)
+    C = len(G[0])
+    x = parse_input(input_text)
+
+
+@aoc_helper.communicator(YEAR, DAY, 2)
+def p2(input_text):
+    L = input_text.split('\n')
+    G = [list(line) for line in L]
+    R = len(G)
+    C = len(G[0])
+    x = parse_input(input_text)
+
+
+if __name__ == "__main__":
+    p1_res = p1()
+    p2_res = p2()
+
+    END_TIME = time.time()
+    aoc_helper.print_results(p1_res, p2_res, END_TIME - START_TIME)
