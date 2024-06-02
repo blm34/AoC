@@ -1,12 +1,12 @@
-import time
 import aoc_helper
-import sys
-START_TIME = time.time()
 
-text = aoc_helper.read_input(sys.argv[1])
-L = text.split('\n')
+DAY = 13
+YEAR = 2015
 
-def gen_graph(L):
+
+def parse_input(input_text):
+    L = input_text.split('\n')
+
     # Generate a graph where the weight of edges between two people represents the change in happiness if they are sat together
     G = dict()
     for line in L:
@@ -33,24 +33,29 @@ def happiness(G, path):
         val += G[person][right]
     return val
 
-G = gen_graph(L)
-p1 = Modules.optimal_hamiltonian(G, happiness, max)
+@aoc_helper.communicator(YEAR, DAY, 1)
+def p1(input_text):
+    G = parse_input(input_text)
+    return aoc_helper.optimal_hamiltonian(G, happiness, max)
 
-# Add 'me' to the graph
-G['me'] = dict()
-for person in G:
-    if person == 'me':
-        continue
-    G[person]['me'] = 0
-    G['me'][person] = 0
 
-p2 = Modules.optimal_hamiltonian(G, happiness, max)
+@aoc_helper.communicator(YEAR, DAY, 2)
+def p2(input_text):
+    G = parse_input(input_text)
+    # Add 'me' to the graph
+    G['me'] = dict()
+    for person in G:
+        if person == 'me':
+            continue
+        G[person]['me'] = 0
+        G['me'][person] = 0
 
-END_TIME = time.time()
-RUN_TIME = round(1000*(END_TIME - START_TIME), 3)
-print(f'Part 1: {p1}')
-print(f'Part 2: {p2}')
-print(f'Run time: {RUN_TIME} ms')
+    return aoc_helper.optimal_hamiltonian(G, happiness, max)
 
-assert p1 == 733
-assert p2 == 725
+
+if __name__ == "__main__":
+    p1_res = p1()
+    aoc_helper.print_results(p1_res, part=1)
+
+    p2_res = p2()
+    aoc_helper.print_results(p2_res, part=2)

@@ -1,16 +1,22 @@
-import time
 import aoc_helper
-import sys
-START_TIME = time.time()
 
-p1 = 0
-p2 = 0
+DAY = 15
+YEAR = 2015
 
-text = aoc_helper.read_input(sys.argv[1])
-L = text.split('\n')
 
-# Calculate the score for a recipe
+def parse_input(input_text):
+    L = input_text.split('\n')
+    properties = []
+    for line in L:
+        line = line.split(': ')[1]
+        properties.append([])
+        for p in line.split(', '):
+            properties[-1].append(int(p.split()[1]))
+    return properties
+
+
 def score(properties, split):
+    """Calculate the score for a recipe"""
     ans = 1
     for p in range(4):
         val = 0
@@ -19,39 +25,51 @@ def score(properties, split):
         ans *= max(val, 0)
     return ans
 
-# Calculate the number of calories for a recipe
+
 def calories(properties, split):
+    """Calculate the number of calories for a recipe"""
     ans = 0
     for i in range(4):
         ans += properties[i][4] * split[i]
     return ans
 
-# Parse input
-properties = []
-for line in L:
-    line = line.split(': ')[1]
-    properties.append([])
-    for p in line.split(', '):
-        properties[-1].append(int(p.split()[1]))
 
-# Loop through all combinations of ingredients
-for i in range(101):
-    for j in range(101):
-        if i+j > 100:
-            break
-        for k in range(101):
-            if i+j+k > 100:
+@aoc_helper.communicator(YEAR, DAY, 1)
+def p1(input_text):
+    properties = parse_input(input_text)
+    ans = 0
+    for i in range(101):
+        for j in range(101):
+            if i+j > 100:
                 break
-            l = 100 - (i+j+k)
-            p1 = max(p1, score(properties, (i,j,k,l)))
-            if calories(properties, (i,j,k,l)) == 500:
-                p2 = max(p2, score(properties, (i,j,k,l)))
+            for k in range(101):
+                if i+j+k > 100:
+                    break
+                l = 100 - (i+j+k)
+                ans = max(ans, score(properties, (i,j,k,l)))
+    return ans
 
-END_TIME = time.time()
-RUN_TIME = round(1000*(END_TIME - START_TIME), 3)
-print(f'Part 1: {p1}')
-print(f'Part 2: {p2}')
-print(f'Run time: {RUN_TIME} ms')
 
-assert p1 == 18965440
-assert p2 == 15862900
+@aoc_helper.communicator(YEAR, DAY, 2)
+def p2(input_text):
+    properties = parse_input(input_text)
+    ans = 0
+    for i in range(101):
+        for j in range(101):
+            if i+j > 100:
+                break
+            for k in range(101):
+                if i+j+k > 100:
+                    break
+                l = 100 - (i+j+k)
+                if calories(properties, (i,j,k,l)) == 500:
+                    ans = max(ans, score(properties, (i,j,k,l)))
+    return ans
+
+
+if __name__ == "__main__":
+    p1_res = p1()
+    aoc_helper.print_results(p1_res, part=1)
+
+    p2_res = p2()
+    aoc_helper.print_results(p2_res, part=2)

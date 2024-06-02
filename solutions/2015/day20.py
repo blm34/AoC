@@ -1,10 +1,7 @@
-import time
-
 import aoc_helper
 
 DAY = 20
 YEAR = 2015
-START_TIME = time.time()
 
 
 def parse_input(input_text):
@@ -35,7 +32,7 @@ def p2(input_text):
 
 if __name__ == "__main__":
     p1_res = p1()
-    p2_res = p2()
+    aoc_helper.print_results(p1_res, part=1)
 
-    END_TIME = time.time()
-    aoc_helper.print_results(p1_res, p2_res, END_TIME - START_TIME)
+    p2_res = p2()
+    aoc_helper.print_results(p2_res, part=2)

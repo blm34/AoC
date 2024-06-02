@@ -1,21 +1,24 @@
-import time
 import aoc_helper
-from copy import deepcopy
 
-START_TIME = time.time()
+DAY = 18
+YEAR = 2015
 
-text = aoc_helper.read_input("18.txt")
-L = text.split('\n')
-G = [list(line) for line in L]
-R = len(G)
-C = len(G[0])
 
-for r in range(R):
-    for c in range(C):
-        G[r][c] = 1 if G[r][c] == "#" else 0
+def parse_input(input_text):
+    L = input_text.split('\n')
+    G = [list(line) for line in L]
+    R = len(G)
+    C = len(G[0])
+
+    for r in range(R):
+        for c in range(C):
+            G[r][c] = 1 if G[r][c] == "#" else 0
+    return G
 
 
 def step(grid, part2=False):
+    R = len(grid)
+    C = len(grid[0])
     next_grid = [[0 for _ in range(C)] for _ in range(R)]
     for r in range(R):
         for c in range(C):
@@ -40,19 +43,25 @@ def count_alive(grid):
     return sum(sum(row) for row in grid)
 
 
-grid1 = deepcopy(G)
-grid2 = deepcopy(G)
+@aoc_helper.communicator(YEAR, DAY, 1)
+def p1(input_text):
+    grid = parse_input(input_text)
+    for _ in range(100):
+        grid = step(grid)
+    return count_alive(grid)
 
-for _ in range(100):
-    grid1 = step(grid1)
-    grid2 = step(grid2, True)
 
-p1 = count_alive(grid1)
-p2 = count_alive(grid2)
+@aoc_helper.communicator(YEAR, DAY, 2)
+def p2(input_text):
+    grid = parse_input(input_text)
+    for _ in range(100):
+        grid = step(grid, True)
+    return count_alive(grid)
 
-END_TIME = time.time()
-RUN_TIME = END_TIME - START_TIME
 
-print(f'Part 1: {p1}')
-print(f'Part 2: {p2}')
-print(f'Run time: {1000 * RUN_TIME:.3f} ms')
+if __name__ == "__main__":
+    p1_res = p1()
+    aoc_helper.print_results(p1_res, part=1)
+
+    p2_res = p2()
+    aoc_helper.print_results(p2_res, part=2)

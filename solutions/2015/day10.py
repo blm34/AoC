@@ -1,13 +1,11 @@
-import time
-START_TIME = time.time()
-
 import aoc_helper
-import sys
 
-text = aoc_helper.read_input(sys.argv[1])
+DAY = 10
+YEAR = 2015
+
 
 def las(num):
-    '''Return the next number in the look-and-see sequence'''
+    """Return the next number in the look-and-see sequence"""
     res = ''
     cur_char = num[0]
     char_count = 0
@@ -21,20 +19,26 @@ def las(num):
     res += str(char_count) + cur_char
     return res
 
-num = text
-for _ in range(40):
-    num = las(num)
-p1 = len(num)
 
-for _ in range(10):
-    num = las(num)
-p2 = len(num)
+def repeat(num, times):
+    for _ in range(times):
+        num = las(num)
+    return num
 
-END_TIME = time.time()
-RUN_TIME = int(1000 * round(END_TIME - START_TIME, 3))
-print(f'Part 1: {p1}')
-print(f'Part 2: {p2}')
-print(f'Run time: {RUN_TIME} ms')
 
-assert p1 == 492982
-assert p2 == 6989950
+@aoc_helper.communicator(YEAR, DAY, 1)
+def p1(input_text):
+    return len(repeat(input_text, 40))
+
+
+@aoc_helper.communicator(YEAR, DAY, 2)
+def p2(input_text):
+    return len(repeat(input_text, 50))
+
+
+if __name__ == "__main__":
+    p1_res = p1()
+    aoc_helper.print_results(p1_res, part=1)
+
+    p2_res = p2()
+    aoc_helper.print_results(p2_res, part=2)

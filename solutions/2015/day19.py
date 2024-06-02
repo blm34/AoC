@@ -1,18 +1,22 @@
-import time
 import aoc_helper
-START_TIME = time.time()
 
-text = aoc_helper.read_input(day=19, year=2015)
-
-replacements_text, molecule = text.split('\n\n')
-
-replacements = list()
-for line in replacements_text.split('\n'):
-    m1, m2 = line.split(' => ')
-    replacements.append((m1, m2))
+DAY = 19
+YEAR = 2015
 
 
-def step(molecule, replacements):
+def parse_input(input_text):
+    replacements_text, molecule = input_text.split('\n\n')
+
+    replacements = list()
+    for line in replacements_text.split('\n'):
+        m1, m2 = line.split(' => ')
+        replacements.append((m1, m2))
+
+    return molecule, replacements
+
+@aoc_helper.communicator(YEAR, DAY, 1)
+def p1(input_text):
+    molecule, replacements = parse_input(input_text)
     unique = set()
     j = -1
     while j+1 < len(molecule):
@@ -26,10 +30,11 @@ def step(molecule, replacements):
             if element == m1:
                 new_molecule = molecule[:i] + m2 + molecule[j+1:]
                 unique.add(new_molecule)
-    return unique
+    return len(unique)
 
-
-def step_count(molecule):
+@aoc_helper.communicator(YEAR, DAY, 2)
+def p2(input_text):
+    molecule, _ = parse_input(input_text)
     j = -1
     count = -1
     while j+1 < len(molecule):
@@ -50,9 +55,9 @@ def step_count(molecule):
     return count
 
 
-p1 = len(step(molecule, replacements))
-p2 = step_count(molecule)
+if __name__ == "__main__":
+    p1_res = p1()
+    aoc_helper.print_results(p1_res, part=1)
 
-END_TIME = time.time()
-RUN_TIME = END_TIME - START_TIME
-aoc_helper.print_results(p1, p2, END_TIME-START_TIME)
+    p2_res = p2()
+    aoc_helper.print_results(p2_res, part=2)

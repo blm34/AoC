@@ -1,13 +1,11 @@
-import time
-START_TIME = time.time()
-
 import aoc_helper
-import sys
 
-text = aoc_helper.read_input(sys.argv[1])
-L = text.split('\n')
+DAY = 14
+YEAR = 2015
 
-def gen_input(L):
+def parse_input(input_text):
+    L = input_text.split('\n')
+
     reindeer = list()
     for line in L:
         _, _, _, speed, _, _, time, _, _, _, _, _, _, rest, _ = line.split()
@@ -28,24 +26,25 @@ def distance(reindeer, time):
 
     return d
     
-# Part 1
-reindeers = gen_input(L)
-p1 = max(distance(reindeer, 2503) for reindeer in reindeers)
+@aoc_helper.communicator(YEAR, DAY, 1)
+def p1(input_text):
+    reindeers = parse_input(input_text)
+    return max(distance(reindeer, 2503) for reindeer in reindeers)
 
-# Part 2
-points = [0] * len(reindeers)
-for t in range(1, 2503+1):
-    dists = [distance(reindeer, t) for reindeer in reindeers]
-    winner = dists.index(max(dists))
-    points[winner] += 1
+@aoc_helper.communicator(YEAR, DAY, 2)
+def p2(input_text):
+    reindeers = parse_input(input_text)
+    points = [0] * len(reindeers)
+    for t in range(1, 2503+1):
+        dists = [distance(reindeer, t) for reindeer in reindeers]
+        winner = dists.index(max(dists))
+        points[winner] += 1
 
-p2 = max(points)
+    return max(points)
 
-END_TIME = time.time()
-RUN_TIME = round(1000*(END_TIME - START_TIME), 3)
-print(f'Part 1: {p1}')
-print(f'Part 2: {p2}')
-print(f'Run time: {RUN_TIME} ms')
+if __name__ == "__main__":
+    p1_res = p1()
+    aoc_helper.print_results(p1_res, part=1)
 
-assert p1 == 2655
-assert p2 == 1059
+    p2_res = p2()
+    aoc_helper.print_results(p2_res, part=2)
