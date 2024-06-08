@@ -1,4 +1,7 @@
 def print_results(result: 'AocResult', year: int=None, day: int=None, part: int=None):
+    if result.answer is None:
+        return
+
     output = ""
     if year is not None:
         output += f"{year} "

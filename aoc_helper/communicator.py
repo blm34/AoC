@@ -79,7 +79,10 @@ class Communicator:
                          cookies=self._cookie)
         return r.text
 
-    def check_answer(self, answer, year: int, day: int, level: int) -> bool:
+    def check_answer(self, answer, year: int, day: int, level: int) -> bool | None:
+        if answer is None:
+            return None
+
         answers_filepath = Path.joinpath(self._root_folder, "answers", f"{year}.json")
 
         if not answers_filepath.is_file():
@@ -131,11 +134,13 @@ class Communicator:
         with open(path, 'w') as file:
             json.dump(answers, file)
 
+
 @dataclass
 class AocResult:
     answer: int | str
     correct: bool
     time: float
+
 
 def communicator(year: int, day: int, level: int):
     def decorator(func):
