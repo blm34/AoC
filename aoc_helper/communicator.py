@@ -9,12 +9,12 @@ import browser_cookie3 as bc3
 
 
 def filter_response_text(text: str) -> str:
-    main_text_match = re.search(r"<main.*?>(.*?)</main>", text)
+    main_text_match = re.search(r"<main.*?>(.*?)</main>", text, re.DOTALL)
 
     if main_text_match:
         main_text = main_text_match.group(1)
     else:
-        main_text = text
+        return text
 
     clean_text = re.sub("<.*?>", "", main_text)
 
