@@ -2,9 +2,23 @@ from pathlib import Path
 import json
 from dataclasses import dataclass
 import time
+import re
 
 import requests
 import browser_cookie3 as bc3
+
+
+def filter_response_text(text: str) -> str:
+    main_text_match = re.search(r"<main.*?>(.*?)</main>", text)
+
+    if main_text_match:
+        main_text = main_text_match.group(1)
+    else:
+        main_text = text
+
+    clean_text = re.sub("<.*?>", "", main_text)
+
+    return clean_text
 
 
 class Communicator:
@@ -103,7 +117,7 @@ class Communicator:
             return False
 
     def upload_answer(self, answer, year: int, day: int, level: int) -> bool:
-        if input(f"Submit answer {answer} for level {level}").lower() != "y":
+        if input(f"Part {level}: Submit `{answer}`? (y/n): ").lower() != "y":
             print("Not submitting answer")
             return False
 
@@ -114,17 +128,21 @@ class Communicator:
         if response.status_code != 200:
             raise ValueError(f"Answer submission failed.\nStatus code: {response.status_code}\n\nResponse:\n{response.text}")
 
-        print(f"Successfully submitted answer.\nResponse:\n{response.text}")
+        print(f"Successfully submitted answer.")
 
-        if "That's the right answer!" in response.text:
+        response_msg = filter_response_text(response.text)
+
+        print(response_msg)
+
+        if "That's the right answer" in response_msg:
             return True
-        elif "That's not the right answer." in response.text:
-            if "too low" in response.text:
+        elif "That's not the right answer" in response_msg:
+            if "too low" in response_msg:
                 pass
-            elif "too high" in response.text:
+            elif "too high" in response_msg:
                 pass
             return False
-        elif "Did you already complete it" in response.text:
+        elif "Did you already complete it" in response_msg:
             raise ValueError("Problem already solved, answer should be stored")
         else:
             raise ValueError("Unexpected response message")
