@@ -12,7 +12,12 @@ def parse_input(input_text):
     return {k: int(v) for k, v in kvs}
 
 
-def step(mana_spent, mana_left, my_hp, boss_hp, shield_cooldown, poison_cooldown, recharge_cooldown, boss_damage, spell_to_cast):
+def step(mana_spent, mana_left, my_hp, boss_hp, shield_cooldown, poison_cooldown, recharge_cooldown, boss_damage, spell_to_cast, part2=False):
+
+    if part2:
+        my_hp -= 1
+        if my_hp <= 0:
+            return
 
     # Use active potions
     if poison_cooldown > 0:
@@ -89,43 +94,30 @@ def step(mana_spent, mana_left, my_hp, boss_hp, shield_cooldown, poison_cooldown
     return mana_spent, mana_left, my_hp, boss_hp, shield_cooldown, poison_cooldown, recharge_cooldown
 
 
-def p2_step(mana_spent, mana_left, my_hp, boss_hp, shield_cooldown, poison_cooldown, recharge_cooldown, boss_damage, spell_to_cast):
-    my_hp -= 1
-    if my_hp <= 0:
-        return
-    return step(mana_spent, mana_left, my_hp, boss_hp, shield_cooldown, poison_cooldown, recharge_cooldown, boss_damage, spell_to_cast)
+def search_graph(boss, part2=False):
+    states = list()
+    heapq.heappush(states, (0, 500, 50, boss['Hit Points'], 0, 0, 0))
+    while states:
+        state = heapq.heappop(states)
+        if state[3] <= 0:
+            return state[0]
+        for spell in ('mm', 'd', 's', 'p', 'r'):
+            next_state = step(*state, boss['Damage'], spell, part2)
+            if next_state is None:
+                continue
+            heapq.heappush(states, next_state)
 
 
 @aoc_helper.communicator(YEAR, DAY, 1)
 def p1(input_text):
     boss = parse_input(input_text)
-    states = list()
-    heapq.heappush(states, (0, 500, 50, boss['Hit Points'], 0, 0, 0))
-    while states:
-        state = heapq.heappop(states)
-        if state[3] <= 0:
-            return state[0]
-        for spell in ('mm', 'd', 's', 'p', 'r'):
-            next_state = step(*state, boss['Damage'], spell)
-            if next_state is None:
-                continue
-            heapq.heappush(states, next_state)
+    return search_graph(boss)
 
 
 @aoc_helper.communicator(YEAR, DAY, 2)
 def p2(input_text):
     boss = parse_input(input_text)
-    states = list()
-    heapq.heappush(states, (0, 500, 50, boss['Hit Points'], 0, 0, 0))
-    while states:
-        state = heapq.heappop(states)
-        if state[3] <= 0:
-            return state[0]
-        for spell in ('mm', 'd', 's', 'p', 'r'):
-            next_state = p2_step(*state, boss['Damage'], spell)
-            if next_state is None:
-                continue
-            heapq.heappush(states, next_state)
+    return search_graph(boss, part2=True)
 
 
 if __name__ == "__main__":
