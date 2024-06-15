@@ -16,10 +16,10 @@ def filter_response_text(text: str) -> str:
     else:
         return text
 
-    clean_text = re.sub("<.*?>", "", main_text, re.DOTALL)
-    one_line = re.sub(r"\n", " ", clean_text)
+    one_line_text = re.sub(r"\r\n|\r|\n", " ", main_text)
+    clean_text = re.sub("<.*?>", "", one_line_text, re.DOTALL)
 
-    return one_line
+    return clean_text
 
 
 class Communicator:
