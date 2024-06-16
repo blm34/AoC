@@ -69,6 +69,9 @@ class Communicator:
         """
         filepath = Path.joinpath(self._root_folder, "input_files", f"{year}", f"day{day}.txt")
 
+        if not filepath.parent.exists():
+            filepath.parent.mkdir()
+
         if not filepath.exists():
             puzzle_input = self.download_input(year, day)
             with open(filepath, 'w') as file:
