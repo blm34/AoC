@@ -1,3 +1,6 @@
+import re
+import heapq
+
 import aoc_helper
 
 DAY = None
