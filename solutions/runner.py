@@ -5,6 +5,7 @@ import sys
 
 from aoc_helper import print_results
 
+
 def get_file_path(year, day):
     return Path(str(year)).joinpath(f"day{day}.py")
 
@@ -33,6 +34,7 @@ if __name__ == "__main__":
             p1_res = module.p1()
             print_results(p1_res, year=year, day=day, part=1)
             stars += 1 if p1_res.correct else 0
+            stars += 1 if p1_res.correct and day == 25 else 0
             total_runtime += p1_res.time
 
             # Run part 2
@@ -45,5 +47,5 @@ if __name__ == "__main__":
     if current_month == 12:
         max_stars += 2 * min(current_day, 25)
 
-    print(f"\nEarned {stars}* out of {max_stars}* ({100*stars/max_stars:.1f}%)")
-    print(f"\nTotal runtime: {total_runtime:.1f} s\nAverage runtime: {1000*total_runtime/stars:.0f} ms")
+    print(f"\nEarned {stars}* out of {max_stars}* ({100 * stars / max_stars:.1f}%)")
+    print(f"\nTotal runtime: {total_runtime:.1f} s\nAverage runtime: {1000 * total_runtime / stars:.0f} ms")
