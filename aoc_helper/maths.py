@@ -1,5 +1,5 @@
 from typing import Iterable
-from numpy import prod as product
+from functools import reduce
 
 
 def gcd(a: int, b: int) -> int:
@@ -45,4 +45,4 @@ def prod(nums: Iterable[int | float]):
     Returns:
         The product of all numbers in nums
     """
-    return product(nums)
+    return reduce((lambda x, y: x*y), nums)
