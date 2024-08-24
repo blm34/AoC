@@ -95,7 +95,9 @@ class Communicator:
         """
         r = requests.get(f"https://adventofcode.com/{year}/day/{day}/input", headers=self._headers,
                          cookies=self._cookie)
-        return r.text
+        input_text = r.text
+        print(f"Input downloaded:\n{input_text[:100]}\n")
+        return input_text
 
     def check_answer(self, answer, year: int, day: int, level: int) -> bool | None:
         if answer is None:
