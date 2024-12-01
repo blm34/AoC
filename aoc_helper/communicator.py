@@ -170,8 +170,9 @@ def communicator(year: int, day: int, level: int):
     def decorator(func):
         comm = Communicator()
 
-        def new_func():
-            input_data = comm.get_input(year, day)
+        def new_func(input_data=None):
+            if input_data is None:
+                input_data = comm.get_input(year, day)
             start_time = time.time()
             answer = func(input_data)
             end_time = time.time()
