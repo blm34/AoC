@@ -1,3 +1,6 @@
+import sys
+
+
 def print_results(result: 'AocResult', year: int=None, day: int=None, part: int=None):
     if result.answer is None:
         return
@@ -19,4 +22,5 @@ def print_results(result: 'AocResult', year: int=None, day: int=None, part: int=
         output += "Run time: "
         output += f"{1000 * time:.3f} ms" if time < 1 else f"{time:.1f} s"
 
-    print(output)
+    file_stream = sys.stdout if result.correct else sys.stderr
+    print(output, file=file_stream)
