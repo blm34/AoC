@@ -7,7 +7,10 @@ from aoc_helper import print_results
 
 
 def get_file_path(year, day):
-    return Path(str(year)) / f"day{day}.py"
+    fp = Path(__file__)
+    while fp.name != 'AoC':
+        fp = fp.parent
+    return fp / "src" / "solutions" / str(year) / f"day{day}.py"
 
 
 def main():
