@@ -14,13 +14,18 @@ def print_results(result: 'AocResult', year: int=None, day: int=None, part: int=
         output += f"Part {part} "
     if output != "":
         output = output.strip() + ": "
-    output += f"{result.answer:<10}"
+    output += f"{result.answer:<20}"
     output += " ✅ " if result.correct else " ❌ "
 
     time = result.time
     if time is not None:
         output += "Run time: "
-        output += f"{1000 * time:.3f} ms" if time < 1 else f"{time:.1f} s"
+        if time > 1:
+            output += f"{time:.1f} s"
+        elif time > 1e-3:
+            output += f"{1e3 * time:.3f} ms"
+        else:
+            output += f"{1e6 * time:.0f} µs"
 
     file_stream = sys.stdout if result.correct else sys.stderr
     print(output, file=file_stream)

@@ -56,7 +56,23 @@ def main():
         max_stars += 2 * min(current_day, 25)
 
     print(f"\nEarned {stars}* out of {max_stars}* ({100 * stars / max_stars:.1f}%)")
-    print(f"\nTotal runtime: {total_runtime:.1f} s\nAverage runtime: {1000 * total_runtime / stars:.0f} ms")
+
+    if total_runtime > 1:
+        format_total_runtime = f"{total_runtime:.1f} s"
+    elif total_runtime > 1e-3:
+        format_total_runtime = f"{1e3 * total_runtime:.3f} ms"
+    else:
+        format_total_runtime = f"{1e6 * total_runtime:.0f} µs"
+
+    avg_runtime = total_runtime / stars if stars != 0 else 0
+    if avg_runtime > 1:
+        format_avg_runtime = f"{avg_runtime:.1f} s"
+    elif avg_runtime > 1e-3:
+        format_avg_runtime = f"{1e3 * avg_runtime:.3f} ms"
+    else:
+        format_avg_runtime = f"{1e6 * avg_runtime:.0f} µs"
+
+    print(f"\nTotal runtime: {format_total_runtime}\nAverage runtime: {format_avg_runtime}")
 
 
 if __name__ == "__main__":
