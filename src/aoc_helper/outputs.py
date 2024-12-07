@@ -19,13 +19,17 @@ def print_results(result: 'AocResult', year: int=None, day: int=None, part: int=
 
     time = result.time
     if time is not None:
-        output += "Run time: "
-        if time > 1:
-            output += f"{time:.1f} s"
-        elif time > 1e-3:
-            output += f"{1e3 * time:.3f} ms"
-        else:
-            output += f"{1e6 * time:.0f} µs"
+        output += f"Run time: {format_time(time)}"
 
     file_stream = sys.stdout if result.correct else sys.stderr
     print(output, file=file_stream)
+
+
+def format_time(time: float) -> str:
+    if time > 1:
+        output = f"{time:.1f} s"
+    elif time > 1e-3:
+        output = f"{1e3 * time:.3f} ms"
+    else:
+        output = f"{1e6 * time:.0f} µs"
+    return output
