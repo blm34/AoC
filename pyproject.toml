@@ -1,0 +1,28 @@
+[build-system]
+requires = ["setuptools >= 61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "AoC"
+version = "1.0.0"
+dependencies = [
+  "browser_cookie3==0.19.*",
+  "requests==2.*",
+]
+requires-python = ">=3.11"
+authors = [
+  {name = "Ben Miller"},
+]
+maintainers = [
+  {name = "Ben Miller"}
+]
+description = "My solutions and helper package for Advent of Code"
+readme = "README.md"
+classifiers = [
+  "Programming Language :: Python",
+  "Programming Language :: Python :: 3",
+  "Programming Language :: Python :: 3.11",
+  "Programming Language :: Python :: 3.12",
+]
+[project.urls]
+Repository = "https://github.com/blm34/AoC"
