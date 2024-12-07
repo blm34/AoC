@@ -173,9 +173,9 @@ def communicator(year: int, day: int, level: int):
         def new_func(input_data=None):
             if input_data is None:
                 input_data = comm.get_input(year, day)
-            start_time = time.time()
+            start_time = time.perf_counter()
             answer = func(input_data)
-            end_time = time.time()
+            end_time = time.perf_counter()
             check = comm.check_answer(answer, year, day, level)
             return AocResult(answer=answer, correct=check, time=end_time-start_time)
         return new_func
