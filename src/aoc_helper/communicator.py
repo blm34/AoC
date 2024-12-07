@@ -161,7 +161,7 @@ class Communicator:
 
 @dataclass
 class AocResult:
-    answer: int | str
+    answer: int | str | None
     correct: bool
     time: float
 
