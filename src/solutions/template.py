@@ -1,10 +1,9 @@
 import re
-import heapq
 
 import aoc_helper
 
 DAY = None
-YEAR = None
+YEAR = 2024
 
 
 def parse_input(input_text):

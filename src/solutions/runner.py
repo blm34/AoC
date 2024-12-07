@@ -11,6 +11,7 @@ def get_file_path(year, day):
 
 
 def main():
+    # ToDo Add filter for year
     stars = 0
     total_runtime = 0
 
