@@ -101,7 +101,7 @@ class Communicator:
 
     def check_answer(self, answer, year: int, day: int, level: int) -> bool | None:
         if answer is None:
-            return None
+            return False
 
         answers_filepath = Path.joinpath(self._root_folder, "answers", f"{year}.json")
 
