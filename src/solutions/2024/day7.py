@@ -1,6 +1,7 @@
 import re
 
 import aoc_helper
+from aoc_helper import digit_count
 
 DAY = 7
 YEAR = 2024
@@ -17,20 +18,13 @@ def parse_input(input_text):
     return equations
 
 
-def count_digits(num):
-    d = 1
-    while 10**d < num:
-        d += 1
-    return d
-
-
 def valid(target, nums, p2=False):
     if len(nums) == 1:
         return target == nums[0]
     v = valid(target - nums[-1], nums[:-1], p2)
     v = v or (target % nums[-1] == 0 and valid(target // nums[-1], nums[:-1], p2))
     if p2:
-        digits = count_digits(nums[-1])
+        digits = digit_count(nums[-1])
         if target % (10**digits) == nums[-1]:
             v = v or valid(target//(10**digits), nums[:-1], p2)
     return v
