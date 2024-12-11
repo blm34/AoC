@@ -34,8 +34,7 @@ def lcm(nums: Iterable[int]) -> int:
     return ans
 
 
-
-def prod(nums: Iterable[int | float]):
+def prod(nums: Iterable[int | float]) -> int | float:
     """
     Calculate the product of numbers in an iterable
 
@@ -45,4 +44,20 @@ def prod(nums: Iterable[int | float]):
     Returns:
         The product of all numbers in nums
     """
-    return reduce((lambda x, y: x*y), nums)
+    return reduce((lambda x, y: x * y), nums)
+
+
+def digit_count(num: int) -> int:
+    """
+    Count the number of digits in a number
+
+    Args:
+        num: The number
+
+    Returns:
+        The number of digits in num
+    """
+    d = 1
+    while 10 ** d <= num:
+        d += 1
+    return d
