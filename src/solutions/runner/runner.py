@@ -1,4 +1,4 @@
-from importlib import import_module
+from importlib import import_module, reload
 from datetime import datetime
 
 from aoc_helper import print_results, AocResult
@@ -7,6 +7,8 @@ from aoc_helper import print_results, AocResult
 def calculate_day(year: int, day: int, args) -> tuple[AocResult, AocResult]:
     try:
         solver = import_module(f"solutions.{year}.day{day}")
+        if args.repeats > 1:
+            reload(solver)  # Necessary to clear functools.cache
     except ModuleNotFoundError:
         return AocResult(None, False, 0), AocResult(None, False, 0)
 
