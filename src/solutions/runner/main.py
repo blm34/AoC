@@ -11,11 +11,11 @@ def main():
     else:  # Run whole years
         results = run_years(args)
 
+    if args.repeats > 1 or args.time:
+        show_times(results, args)
+
     if args.stars:
         show_stars(results, args)
-
-    if args.repeats > 1:
-        show_times(results, args)
 
 
 if __name__ == "__main__":

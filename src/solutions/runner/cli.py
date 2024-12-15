@@ -65,6 +65,11 @@ def parse_args():
                         type=pos_int,
                         help="The number of times to run the solutions for calculating run time.")
 
+    parser.add_argument("-t", "--time",
+                        action="store_true",
+                        default=False,
+                        help="Show stats about the time to run")
+
     parser.add_argument("-s", "--stars",
                         action="store_true",
                         default=False,
