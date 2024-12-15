@@ -26,3 +26,5 @@ classifiers = [
 ]
 [project.urls]
 Repository = "https://github.com/blm34/AoC"
+[project.scripts]
+aoc = "solutions.runner.main:main"
