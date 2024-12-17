@@ -59,19 +59,20 @@ def show_times(results, args):
             avg_times[year][day] = dict()
             min_times[year][day] = dict()
             for part in (1, 2):
-                avg_time = sum(result.time for result in results[year][day][part-1]) / args.repeats
-                min_time = min(result.time for result in results[year][day][part-1])
-                if not min_time == 0:
+                if results[year][day][part-1][0].correct is True:
+                    avg_time = sum(result.time for result in results[year][day][part-1]) / args.repeats
+                    min_time = min(result.time for result in results[year][day][part-1])
                     avg_times[year][day][part] = avg_time
                     min_times[year][day][part] = min_time
 
     total_avg_time = 0
     total_min_time = 0
     print("\nYEAR DAY PART     AVG TIME     MIN TIME")
-    line = ""
     for year in args.year:
-        line += f"{year} "
+        line = f"{year} "
         for day in sorted(avg_times[year].keys()):
+            if len(line) != 5:
+                line = " " * 5
             line += f"{day:2d}   "
             for part in sorted(avg_times[year][day].keys()):
                 line += f" {part}"
