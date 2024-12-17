@@ -31,9 +31,9 @@ def p2(input_text):
         hash_bytes = updated_hash.digest()
         if (not hash_bytes[0]) and (not hash_bytes[1]) and (not (hash_bytes[2] >> 4)):
             loc = hash_bytes[2] & 15
-            val = hash_bytes[3] >> 4
             if loc < 8 and password[loc] is None:
-                password[loc] = str(val)
+                val = hash_bytes[3] >> 4
+                password[loc] = hex(val)[2]
                 if all(digit is not None for digit in password):
                     return ''.join(password)
 
