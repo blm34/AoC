@@ -67,6 +67,7 @@ def show_times(results, args):
 
     total_avg_time = 0
     total_min_time = 0
+    parts_solved = 0
     print("\nYEAR DAY PART     AVG TIME     MIN TIME")
     for year in args.year:
         line = f"{year} "
@@ -75,6 +76,7 @@ def show_times(results, args):
                 line = " " * 5
             line += f"{day:2d}   "
             for part in sorted(avg_times[year][day].keys()):
+                parts_solved += 1
                 line += f" {part}"
                 line = f"{line:>12} "
                 avg_time = avg_times[year][day][part]
@@ -88,5 +90,6 @@ def show_times(results, args):
                 print(line)
                 line = ""
     print(f"\n        TOTAL{format_time(total_avg_time):>13}{format_time(total_min_time):>13}")
+    print(f"         AVG {format_time(total_avg_time/parts_solved):>13}{format_time(total_min_time/parts_solved):>13}")
 
 
