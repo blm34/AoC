@@ -124,13 +124,14 @@ def p2(input_text):
     for i in range(1, len(prog)+1):
         next_a = []
         for a in prev_a:
-            a <<= 3
-            for num in range(8):
-                new_a = a | num
-                computer.restart([new_a, 0, 0])
-                computer.run()
+            a *= 8
+            for _ in range(8):
+                computer.restart([a, 0, 0])
+                while len(computer.output) == 0:
+                    computer.run_one_inst()
                 if computer.output[0] == prog[-i]:
-                    next_a.append(new_a)
+                    next_a.append(a)
+                a += 1
         prev_a = next_a
     return min(prev_a)
 
