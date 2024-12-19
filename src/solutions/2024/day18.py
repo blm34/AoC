@@ -13,6 +13,43 @@ dirs = ((-1, 0),
         (0, -1))
 
 
+class DisjointUnionSet:
+    def __init__(self, size):
+        self.rank = [[0 for c in range(size + 2)] for r in range(size + 2)]
+        self.parent = [[0 for c in range(size + 2)] for r in range(size + 2)]
+        for r in range(size + 2):
+            for c in range(size + 2):
+                self.parent[r][c] = (r - 1, c - 1)
+
+    def find(self, cell):
+        cr, cc = cell
+        if self.parent[cr + 1][cc + 1] != cell:
+            self.parent[cr + 1][cc + 1] = self.find(self.parent[cr + 1][cc + 1])
+        return self.parent[cr + 1][cc + 1]
+
+    def union(self, x, y):
+        x_root = self.find(x)
+        y_root = self.find(y)
+
+        if x_root == y_root:
+            return
+
+        xrr, xrc = x_root
+        yrr, yrc = y_root
+        if self.rank[xrr + 1][xrc + 1] < self.rank[yrr + 1][yrc + 1]:
+            self.parent[xrr + 1][xrc + 1] = y_root
+        elif self.rank[yrr + 1][yrc + 1] < self.rank[xrr + 1][xrc + 1]:
+            self.parent[yrr + 1][yrc + 1] = x_root
+        else:
+            self.parent[yrr + 1][yrc + 1] = x_root
+            self.rank[xrr + 1][yrr + 1] += 1
+
+    def same_set(self, x, y):
+        x_root = self.find(x)
+        y_root = self.find(y)
+        return x_root == y_root
+
+
 def parse_input(input_text):
     lines = input_text.split('\n')
     coords = []
@@ -20,41 +57,6 @@ def parse_input(input_text):
         coord = tuple(map(int, line.split(",")))
         coords.append(coord)
     return coords
-
-
-def make_graph(coords):
-    coords = set(coords)
-    graph = dict()
-    for r in range(R):
-        for c in range(C):
-            if not (r, c) in coords:
-                if (r, c) not in graph:
-                    graph[(r, c)] = set()
-                for dr, dc in dirs:
-                    rr = r + dr
-                    cc = c + dc
-                    if 0 <= rr < R and 0 <= cc < C and (rr, cc) not in coords:
-                        if (rr, cc) not in graph:
-                            graph[(rr, cc)] = set()
-                        graph[(r, c)].add((rr, cc))
-                        graph[(rr, cc)].add((r, c))
-    return graph
-
-
-def connected(graph):
-    seen = set()
-    stack = [(0, 0)]
-    while stack:
-        node = stack.pop()
-        if node in seen:
-            continue
-        seen.add(node)
-        for adj in graph[node]:
-            if adj == (R-1, C-1):
-                return True
-            if adj not in seen:
-                stack.append(adj)
-    return False
 
 
 @aoc_helper.communicator(YEAR, DAY, 1)
@@ -69,30 +71,47 @@ def p1(input_text):
         if (r, c) in coords:
             continue
         coords.add((r, c))
-        if r == R-1 and c == C-1:
+        if r == R - 1 and c == C - 1:
             return dist
         for dr, dc in dirs:
             rr = r + dr
             cc = c + dc
             if 0 <= rr < R and 0 <= cc < C and (rr, cc) not in coords:
-                heapq.heappush(heap, (dist+1, (rr, cc)))
+                heapq.heappush(heap, (dist + 1, (rr, cc)))
 
 
 @aoc_helper.communicator(YEAR, DAY, 2)
 def p2(input_text):
     coords = parse_input(input_text)
 
-    min_index = 1025
-    max_index = len(coords)
-    while max_index != min_index:
-        index = (max_index + min_index) // 2
-        graph = make_graph(coords[:index+1])
-        if connected(graph):
-            min_index = index + 1
-        else:
-            max_index = index
-    coord = coords[min_index]
-    return f"{coord[0]},{coord[1]}"
+    fallen = set()
+    dus = DisjointUnionSet(R)
+    for i in range(R):
+        # Add bottom and left edges as one set
+        dus.union((i, -1), (i + 1, -1))
+        fallen.add((i, -1))
+        dus.union((R, i - 1), (R, i))
+        fallen.add((R, i-1))
+        # Add top right edges as another set
+        dus.union((-1, i), (-1, i + 1))
+        fallen.add((-1, i))
+        dus.union((i - 1, C), (i, C))
+        fallen.add((i-1, C))
+    fallen.add((R, -1))
+    fallen.add((R, C-1))
+    fallen.add((-1, C))
+    fallen.add((R-1, C))
+
+    for r, c in coords:
+        fallen.add((r, c))
+        for dr in (-1, 0, 1):
+            for dc in (-1, 0, 1):
+                if 0 == dr == dc:
+                    continue
+                if (r+dr, c+dc) in fallen:
+                    dus.union((r, c), (r + dr, c + dc))
+        if dus.same_set((R, -1), (-1, C)):
+            return f"{r},{c}"
 
 
 if __name__ == "__main__":
