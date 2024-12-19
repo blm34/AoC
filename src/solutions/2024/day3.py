@@ -22,10 +22,18 @@ def p1(input_text):
 
 @aoc_helper.communicator(YEAR, DAY, 2)
 def p2(input_text):
-    sections = re.split(r"do\(\)", input_text)
-    sections = (re.sub(r"don't\(\).*", "", section, flags=re.DOTALL)
-                for section in sections)
-    return sum(map(product, sections))
+    pattern = r"mul\((\d{1,3}),(\d{1,3})\)|(do)\(\)|(don't)\(\)"
+    matches = re.findall(pattern, input_text)
+    result = 0
+    active = True
+    for match in matches:
+        if match[3] == "don't":
+            active = False
+        elif match[2] == "do":
+            active = True
+        elif active:
+            result += int(match[0]) * int(match[1])
+    return result
 
 
 if __name__ == "__main__":
