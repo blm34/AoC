@@ -32,6 +32,8 @@ def format_time(time: float) -> str:
         output = f"{1e3 * time:.0f} ms"
     elif time > 1e-3:
         output = f"{1e3 * time:.1f} ms"
-    else:
+    elif time > 1e-6:
         output = f"{1e6 * time:.0f} µs"
+    else:
+        output = f"{1e9 * time:.0f} ns"
     return output
