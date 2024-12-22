@@ -45,7 +45,7 @@ def run_one_day(args):
     for repeat in range(args.repeats):
         if not args.quiet and args.repeats > 1:
             line = "\n" if args.verbose else ""
-            line += f"{datetime.now().strftime("%H:%M:%S")} Repeat {repeat+1}/{args.repeats} ({(repeat+1)/args.repeats*100:.0f}%)"
+            line += f"{datetime.now().strftime('%H:%M:%S')} Repeat {repeat+1}/{args.repeats} ({(repeat+1)/args.repeats*100:.0f}%)"
             print(line)
         result = calculate_day(args.year[0], args.day, args)
         p1.append(result[0])
@@ -70,7 +70,7 @@ def run_years(args):
     for repeat in range(args.repeats):
         if not args.quiet and args.repeats > 1:
             line = "\n" if args.verbose else ""
-            line += f"{datetime.now().strftime("%H:%M:%S")} Repeat {repeat + 1}/{args.repeats} ({(repeat + 1) / args.repeats * 100:.0f}%)"
+            line += f"{datetime.now().strftime('%H:%M:%S')} Repeat {repeat + 1}/{args.repeats} ({(repeat + 1) / args.repeats * 100:.0f}%)"
             print(line)
         for year in args.year:
             for day in range(1, 26):
