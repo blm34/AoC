@@ -106,21 +106,21 @@ def get_moves_to_press(move):
     return moves
 
 
-@aoc_helper.communicator(YEAR, DAY, 1)
 def p1(input_text):
     codes = input_text.split('\n')
     return sum(complexity(code, depth=3) for code in codes)
 
 
-@aoc_helper.communicator(YEAR, DAY, 2)
 def p2(input_text):
     codes = input_text.split('\n')
     return sum(complexity(code, depth=26) for code in codes)
 
 
-if __name__ == "__main__":
-    p1_res = p1()
-    aoc_helper.print_results(p1_res, part=1)
+@aoc_helper.communicator(YEAR, DAY)
+def solve(input_text):
+    return p1(input_text), p2(input_text)
 
-    p2_res = p2()
-    aoc_helper.print_results(p2_res, part=2)
+
+if __name__ == "__main__":
+    result = solve()
+    aoc_helper.print_results(result, YEAR, DAY)

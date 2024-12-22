@@ -14,7 +14,6 @@ def parse_input(input_text):
 
     return molecule, replacements
 
-@aoc_helper.communicator(YEAR, DAY, 1)
 def p1(input_text):
     molecule, replacements = parse_input(input_text)
     unique = set()
@@ -32,7 +31,6 @@ def p1(input_text):
                 unique.add(new_molecule)
     return len(unique)
 
-@aoc_helper.communicator(YEAR, DAY, 2)
 def p2(input_text):
     molecule, _ = parse_input(input_text)
     j = -1
@@ -55,9 +53,11 @@ def p2(input_text):
     return count
 
 
-if __name__ == "__main__":
-    p1_res = p1()
-    aoc_helper.print_results(p1_res, part=1)
+@aoc_helper.communicator(YEAR, DAY)
+def solve(input_text):
+    return p1(input_text), p2(input_text)
 
-    p2_res = p2()
-    aoc_helper.print_results(p2_res, part=2)
+
+if __name__ == "__main__":
+    result = solve()
+    aoc_helper.print_results(result, YEAR, DAY)

@@ -32,19 +32,20 @@ def dfs(graph, path, dist, part2=False):
     else:
         return min(dfs(graph, path+[neigh], dist+graph[vert][neigh], part2) for neigh in graph[vert] if neigh not in path)
 
-@aoc_helper.communicator(YEAR, DAY, 1)
 def p1(input_text):
     graph = parse_input(input_text)
     return dfs(graph, ['start'], 0)
 
-@aoc_helper.communicator(YEAR, DAY, 2)
 def p2(input_text):
     graph = parse_input(input_text)
     return dfs(graph, ['start'], 0, part2=True)
 
-if __name__ == "__main__":
-    p1_res = p1()
-    aoc_helper.print_results(p1_res, part=1)
 
-    p2_res = p2()
-    aoc_helper.print_results(p2_res, part=2)
+@aoc_helper.communicator(YEAR, DAY)
+def solve(input_text):
+    return p1(input_text), p2(input_text)
+
+
+if __name__ == "__main__":
+    result = solve()
+    aoc_helper.print_results(result, YEAR, DAY)

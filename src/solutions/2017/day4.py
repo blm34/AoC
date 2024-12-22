@@ -10,13 +10,11 @@ def valid_phrase(phrase):
     return not re.search(r"\b([a-z]+)\b.+\b\1\b", phrase)
 
 
-@aoc_helper.communicator(YEAR, DAY, 1)
 def p1(input_text):
     lines = input_text.split('\n')
     return sum(valid_phrase(line) for line in lines)
 
 
-@aoc_helper.communicator(YEAR, DAY, 2)
 def p2(input_text):
     lines = input_text.split('\n')
     phrases = [line.split() for line in lines]
@@ -28,9 +26,11 @@ def p2(input_text):
     return sum(valid_phrase(phrase) for phrase in phrases)
 
 
-if __name__ == "__main__":
-    p1_res = p1()
-    aoc_helper.print_results(p1_res, part=1)
+@aoc_helper.communicator(YEAR, DAY)
+def solve(input_text):
+    return p1(input_text), p2(input_text)
 
-    p2_res = p2()
-    aoc_helper.print_results(p2_res, part=2)
+
+if __name__ == "__main__":
+    result = solve()
+    aoc_helper.print_results(result, YEAR, DAY)

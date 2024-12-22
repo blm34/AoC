@@ -34,7 +34,6 @@ def min_tokens(da, db, target):
         return 0, 0
 
 
-@aoc_helper.communicator(YEAR, DAY, 1)
 def p1(input_text):
     turns = parse_input(input_text)
     tokens = 0
@@ -44,7 +43,6 @@ def p1(input_text):
     return tokens
 
 
-@aoc_helper.communicator(YEAR, DAY, 2)
 def p2(input_text):
     turns = parse_input(input_text)
     tokens = 0
@@ -54,10 +52,10 @@ def p2(input_text):
         tokens += 3*a + b
     return tokens
 
+@aoc_helper.communicator(YEAR, DAY)
+def solve(input_text):
+    return p1(input_text), p2(input_text)
 
 if __name__ == "__main__":
-    p1_res = p1()
-    aoc_helper.print_results(p1_res, part=1)
-
-    p2_res = p2()
-    aoc_helper.print_results(p2_res, part=2)
+    result = solve()
+    aoc_helper.print_results(result, YEAR, DAY)

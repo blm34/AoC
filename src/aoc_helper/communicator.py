@@ -105,7 +105,7 @@ class Communicator:
         print(f"Input downloaded:\n{input_text[:100]}\n")
         return input_text
 
-    def check_answer(self, answer, year: int, day: int, level: int) -> bool | None:
+    def check_answer(self, answer, year: int, day: int, part: int) -> bool | None:
         if answer is None:
             return False
 
@@ -117,11 +117,11 @@ class Communicator:
         with open(answers_filepath, 'r') as file:
             correct_answers = json.load(file)
 
-        if correct_answers[str(day)][str(level)] is not None:
-            return correct_answers[str(day)][str(level)] == answer
+        if correct_answers[str(day)][str(part)] is not None:
+            return correct_answers[str(day)][str(part)] == answer
 
-        elif self.upload_answer(answer, year, day, level):
-            correct_answers[str(day)][str(level)] = answer
+        elif self.upload_answer(answer, year, day, part):
+            correct_answers[str(day)][str(part)] = answer
             with open(answers_filepath, 'w') as file:
                 json.dump(correct_answers, file)
             return True
@@ -167,12 +167,14 @@ class Communicator:
 
 @dataclass
 class AocResult:
-    answer: int | str | None
-    correct: bool
+    p1_ans: int | str | None
+    p1_correct: bool
+    p2_ans: int | str | None
+    p2_correct: bool
     time: float
 
 
-def communicator(year: int, day: int, level: int):
+def communicator(year: int, day: int):
     def decorator(func):
         comm = Communicator()
 
@@ -180,9 +182,14 @@ def communicator(year: int, day: int, level: int):
             if input_data is None:
                 input_data = comm.get_input(year, day)
             start_time = time.perf_counter()
-            answer = func(input_data)
+            p1_ans, p2_ans = func(input_data)
             end_time = time.perf_counter()
-            check = comm.check_answer(answer, year, day, level)
-            return AocResult(answer=answer, correct=check, time=end_time-start_time)
+            p1_correct = comm.check_answer(p1_ans, year, day, 1)
+            p2_correct = comm.check_answer(p2_ans, year, day, 2)
+            return AocResult(p1_ans=p1_ans,
+                             p1_correct=p1_correct,
+                             p2_ans=p2_ans,
+                             p2_correct=p2_correct,
+                             time=end_time-start_time)
         return new_func
     return decorator

@@ -62,7 +62,6 @@ def increment(password):
             return password
 
 
-@aoc_helper.communicator(YEAR, DAY, 1)
 def p1(input_text):
     password = pass_to_list(input_text)
     while not valid(password):
@@ -70,7 +69,6 @@ def p1(input_text):
     return list_to_pass(password)
 
 
-@aoc_helper.communicator(YEAR, DAY, 2)
 def p2(input_text):
     p1_ans = p1().answer
     password = pass_to_list(p1_ans)
@@ -80,9 +78,11 @@ def p2(input_text):
     return list_to_pass(password)
 
 
-if __name__ == "__main__":
-    p1_res = p1()
-    aoc_helper.print_results(p1_res, part=1)
+@aoc_helper.communicator(YEAR, DAY)
+def solve(input_text):
+    return p1(input_text), p2(input_text)
 
-    p2_res = p2()
-    aoc_helper.print_results(p2_res, part=2)
+
+if __name__ == "__main__":
+    result = solve()
+    aoc_helper.print_results(result, YEAR, DAY)

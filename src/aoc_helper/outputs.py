@@ -1,28 +1,21 @@
 import sys
 
 
-def print_results(result: 'AocResult', year: int=None, day: int=None, part: int=None):
-    if result.answer is None:
+def print_results(result: 'AocResult', year: int, day: int):
+    if result.p1_ans is None and result.p2_ans is None:
         return
 
-    output = ""
-    if year is not None:
-        output += f"{year} "
-    if day is not None:
-        output += f"{day:02d} "
-    if part is not None:
-        output += f"Part {part} "
-    if output != "":
-        output = output.strip() + ": "
-    output += f"{result.answer:<20}"
-    output += " ✅ " if result.correct else " ❌ "
+    p1_ans = result.p1_ans or ""
+    p2_ans = result.p2_ans or ""
 
-    time = result.time
-    if time is not None:
-        output += f"Run time: {format_time(time)}"
+    output = f"{year} {day:02d} Part 1: {p1_ans:<20}"
+    output += " (/) " if result.p1_correct else " (X) "
+    output += f"Run time: {format_time(result.time)}"
 
-    file_stream = sys.stdout if result.correct else sys.stderr
-    print(output, file=file_stream)
+    output += f"\n        Part 2: {p2_ans:<20}"
+    output += " (/) " if result.p2_correct else " (X) "
+
+    print(output)
 
 
 def format_time(time: float) -> str:
@@ -33,7 +26,7 @@ def format_time(time: float) -> str:
     elif time > 1e-3:
         output = f"{1e3 * time:.1f} ms"
     elif time > 1e-6:
-        output = f"{1e6 * time:.0f} µs"
+        output = f"{1e6 * time:.0f} us"
     else:
         output = f"{1e9 * time:.0f} ns"
     return output

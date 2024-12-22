@@ -59,7 +59,6 @@ def parse_input(input_text):
     return coords
 
 
-@aoc_helper.communicator(YEAR, DAY, 1)
 def p1(input_text):
     coords = parse_input(input_text)
     coords = set(coords[:1024])
@@ -80,7 +79,6 @@ def p1(input_text):
                 heapq.heappush(heap, (dist + 1, (rr, cc)))
 
 
-@aoc_helper.communicator(YEAR, DAY, 2)
 def p2(input_text):
     coords = parse_input(input_text)
 
@@ -114,9 +112,11 @@ def p2(input_text):
             return f"{r},{c}"
 
 
-if __name__ == "__main__":
-    p1_res = p1()
-    aoc_helper.print_results(p1_res, part=1)
+@aoc_helper.communicator(YEAR, DAY)
+def solve(input_text):
+    return p1(input_text), p2(input_text)
 
-    p2_res = p2()
-    aoc_helper.print_results(p2_res, part=2)
+
+if __name__ == "__main__":
+    result = solve()
+    aoc_helper.print_results(result, YEAR, DAY)

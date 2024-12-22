@@ -3,7 +3,6 @@ import aoc_helper
 DAY = 6
 YEAR = 2024
 
-
 DIRECTIONS = [(-1, 0),
               (0, 1),
               (1, 0),
@@ -32,8 +31,8 @@ def get_visited(G):
 
         for _ in range(2):
             dr, dc = DIRECTIONS[direction_index]
-            if 0 <= guard_r+dr < R and 0 <= guard_c+dc < C:
-                if G[guard_r+dr][guard_c+dc] == '#':
+            if 0 <= guard_r + dr < R and 0 <= guard_c + dc < C:
+                if G[guard_r + dr][guard_c + dc] == '#':
                     direction_index = (direction_index + 1) % 4
                 else:
                     break
@@ -47,12 +46,12 @@ def get_visited(G):
     return visited
 
 
-@aoc_helper.communicator(YEAR, DAY, 1)
 def p1(input_text):
     G = input_text.split('\n')
 
     visited = get_visited(G)
     return len(visited)
+
 
 def get_jumps(G) -> list[list[list[tuple[int, int]]]]:
     R = len(G)
@@ -70,7 +69,7 @@ def get_jumps(G) -> list[list[list[tuple[int, int]]]]:
                             jumps[r][c][d] = (guard_r, guard_c)
                             break
                     else:
-                        jumps[r][c][d] = (guard_r+dr, guard_c+dc)
+                        jumps[r][c][d] = (guard_r + dr, guard_c + dc)
                         break
 
                     guard_r += dr
@@ -78,7 +77,6 @@ def get_jumps(G) -> list[list[list[tuple[int, int]]]]:
     return jumps
 
 
-@aoc_helper.communicator(YEAR, DAY, 2)
 def p2(input_text):
     G = input_text.split('\n')
     R = len(G)
@@ -125,9 +123,11 @@ def p2(input_text):
     return loops
 
 
-if __name__ == "__main__":
-    p1_res = p1()
-    aoc_helper.print_results(p1_res, part=1)
+@aoc_helper.communicator(YEAR, DAY)
+def solve(input_text):
+    return p1(input_text), p2(input_text)
 
-    p2_res = p2()
-    aoc_helper.print_results(p2_res, part=2)
+
+if __name__ == "__main__":
+    result = solve()
+    aoc_helper.print_results(result, YEAR, DAY)
