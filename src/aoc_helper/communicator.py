@@ -5,7 +5,6 @@ import time
 import re
 
 import requests
-import browser_cookie3 as bc3
 
 
 def filter_response_text(text: str) -> str:
@@ -31,24 +30,24 @@ class Communicator:
         return cls._instance
 
     def __init__(self):
-        self._cookie = self.get_cookie()
         self._headers = {
             'User-Agent': ''  # ToDo: Include email and url to github repo where code can be seen here
         }
         self._root_folder = self.get_root_folder()
+        self._cookie = self.get_cookie()
 
     def get_cookie(self):
-        cookies = bc3.firefox(domain_name=".adventofcode.com")
+        filepath = self._root_folder / "cookie.txt"
 
-        if ".adventofcode.com" not in str(cookies):
-            input("Cookie not in Firefox. Temporarily Close chrome then press enter to continue")
-            cookies = bc3.chrome(domain_name=".adventofcode.com")
-            print("You may now reopen Chrome")
+        if not filepath.exists():
+            cookie = input("Cookie file not found. Enter session cookie here: ")
+            with open(filepath, 'w') as file:
+                file.write(cookie)
 
-        if ".adventofcode.com" not in str(cookies):
-            raise ValueError("Cannot find a cookie")
+        with open(filepath) as file:
+            cookie = file.read()
 
-        return cookies
+        return {"session": cookie.strip()}
 
     def get_root_folder(self):
         path = Path().absolute()
@@ -96,6 +95,13 @@ class Communicator:
         r = requests.get(f"https://adventofcode.com/{year}/day/{day}/input", headers=self._headers,
                          cookies=self._cookie)
         input_text = r.text
+
+        if "Please log in" in input_text:
+            raise ValueError("Cookie in `cookie.txt` not valid - please save your session cookie as text in this file")
+
+        if 'before it unlocks' in input_text:
+            raise ValueError(f"This year {year} day {day} is not available yet")
+
         print(f"Input downloaded:\n{input_text[:100]}\n")
         return input_text
 
@@ -144,9 +150,9 @@ class Communicator:
             return True
         elif "That's not the right answer" in response_msg:
             if "too low" in response_msg:
-                pass
+                pass  # ToDo: Give custom response for too low answers
             elif "too high" in response_msg:
-                pass
+                pass  # ToDo: Give custom response for too high answers
             return False
         elif "Did you already complete it" in response_msg:
             raise ValueError("Problem already solved, answer should be stored")

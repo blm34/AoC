@@ -1,5 +1,6 @@
 input_files/
 answers/
+cookie.txt
 build/
 src/AoC.egg-info
 __pycache__/
