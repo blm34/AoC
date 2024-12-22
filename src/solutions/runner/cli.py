@@ -2,7 +2,7 @@ import argparse
 from datetime import datetime
 
 
-def pos_int(num):
+def repeats_type(num):
     try:
         num = int(num)
     except ValueError:
@@ -32,11 +32,18 @@ def year_type(year):
 
     return year
 
+
 def day_type(day):
     try:
         day = int(day)
     except ValueError:
         raise argparse.ArgumentTypeError(f"Day must be an integer. '{day}' not valid.")
+
+    if day < 1 or day > 25:
+        raise argparse.ArgumentTypeError(f"Day must be from 1 - 25. {day} not valid.")
+
+    return day
+
 
 def parse_args():
     parser = argparse.ArgumentParser(prog="aoc",
@@ -49,20 +56,20 @@ def parse_args():
         latest_year -= 1
     parser.add_argument("-y", "--year",
                         nargs="*",
-                        default=list(range(2015, latest_year+1)),
+                        default=list(range(2015, latest_year + 1)),
                         type=year_type,
                         help="The year (or years) to run.")
 
     parser.add_argument("-d", "--day",
                         nargs="?",
                         default=0,
-                        type=int,
+                        type=day_type,
                         help="The day to run.")
 
     parser.add_argument("-r", "--repeats",
                         nargs="?",
                         default=1,
-                        type=pos_int,
+                        type=repeats_type,
                         help="The number of times to run the solutions for calculating run time.")
 
     parser.add_argument("-t", "--time",
@@ -86,7 +93,8 @@ def parse_args():
                         help="Turn off all unrequested outputs.")
 
     args = parser.parse_args()
-    args.year = sorted(set(args.year))  # Remove duplicates and sort
+    args.year = sorted(set(args.year))  # Remove duplicates and sorts
+
     validate_args(args)
 
     return args

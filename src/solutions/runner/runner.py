@@ -4,31 +4,23 @@ from datetime import datetime
 from aoc_helper import print_results, AocResult
 
 
-def calculate_day(year: int, day: int, args) -> tuple[AocResult, AocResult]:
+def calculate_day(year: int, day: int, args) -> AocResult:
     try:
         solver = import_module(f"solutions.{year}.day{day}")
         if args.repeats > 1:
             reload(solver)  # Necessary to clear functools.cache
     except ModuleNotFoundError:
-        return AocResult(None, False, 0), AocResult(None, False, 0)
+        return AocResult(None, False, None, False, 0)
 
     try:
-        p1 = solver.p1()
+        result = solver.solve()
     except Exception:
-        p1 = AocResult(None, False, 0)
+        result = AocResult(None, False, None, False, 0)
     else:
         if args.verbose:
-            print_results(p1, year, day, 1)
+            print_results(result, year, day)
 
-    try:
-        p2 = solver.p2()
-    except Exception:
-        p2 = AocResult(None, False, 0)
-    else:
-        if args.verbose:
-            print_results(p2, year, day, 2)
-
-    return p1, p2
+    return result
 
 
 def run_one_day(args):
@@ -39,8 +31,7 @@ def run_one_day(args):
         message += "."
         print(message)
 
-    p1 = list()
-    p2 = list()
+    results = list()
 
     for repeat in range(args.repeats):
         if not args.quiet and args.repeats > 1:
@@ -48,10 +39,9 @@ def run_one_day(args):
             line += f"{datetime.now().strftime('%H:%M:%S')} Repeat {repeat+1}/{args.repeats} ({(repeat+1)/args.repeats*100:.0f}%)"
             print(line)
         result = calculate_day(args.year[0], args.day, args)
-        p1.append(result[0])
-        p2.append(result[1])
+        results.append(result)
 
-    return {args.year[0]: {args.day: [p1, p2]}}
+    return {args.year[0]: {args.day: results}}
 
 
 def run_years(args):
@@ -63,7 +53,7 @@ def run_years(args):
         message += "."
         print(message)
 
-    results = {year: {day: [[], []]
+    results = {year: {day: []
                       for day in range(1, 26)}
                for year in args.year}
 
@@ -75,7 +65,6 @@ def run_years(args):
         for year in args.year:
             for day in range(1, 26):
                 result = calculate_day(year, day, args)
-                results[year][day][0].append(result[0])
-                results[year][day][1].append(result[1])
+                results[year][day].append(result)
 
     return results

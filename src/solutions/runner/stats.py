@@ -16,12 +16,12 @@ def show_stars(results, args):
         line += str(year)
         for day in range(1, 26):
             line += " "
-            if results[year][day][0][0].correct:
+            if results[year][day][0].p1_correct:
                 line += "*"
                 stars[year] += 1
             else:
                 line += " "
-            if results[year][day][1][0].correct or day == 25 and results[year][day][0][0].correct:
+            if results[year][day][0].p2_correct or day == 25 and results[year][day][0].p1_correct:
                 line += "*"
                 stars[year] += 1
             else:
@@ -49,47 +49,31 @@ def show_stars(results, args):
 
 
 def show_times(results, args):
-    avg_times = dict()
-    min_times = dict()
-
-    for year in results:
-        avg_times[year] = dict()
-        min_times[year] = dict()
-        for day in results[year]:
-            avg_times[year][day] = dict()
-            min_times[year][day] = dict()
-            for part in (1, 2):
-                if results[year][day][part-1][0].correct is True:
-                    avg_time = sum(result.time for result in results[year][day][part-1]) / args.repeats
-                    min_time = min(result.time for result in results[year][day][part-1])
-                    avg_times[year][day][part] = avg_time
-                    min_times[year][day][part] = min_time
-
     total_avg_time = 0
     total_min_time = 0
-    parts_solved = 0
-    print("\nYEAR DAY PART     AVG TIME     MIN TIME")
-    for year in args.year:
+    days_solved = 0
+    print("\nYEAR DAY     AVG TIME     MIN TIME")
+    for year in results:
         line = f"{year} "
-        for day in sorted(avg_times[year].keys()):
-            if len(line) != 5:
-                line = " " * 5
-            line += f"{day:2d}   "
-            for part in sorted(avg_times[year][day].keys()):
-                parts_solved += 1
-                line += f" {part}"
-                line = f"{line:>12} "
-                avg_time = avg_times[year][day][part]
+        for day in results[year]:
+            if results[year][day][0].p1_correct or results[year][day][0].p2_correct is True:
+                days_solved += 1
+                avg_time = sum(result.time for result in results[year][day]) / args.repeats
+                min_time = min(result.time for result in results[year][day])
+
+                line += f"{day:2d}"
+                line = f"{line:>7}"
                 total_avg_time += avg_time
                 line += f"{format_time(avg_time):>13}"
 
-                min_time = min_times[year][day][part]
                 total_min_time += min_time
                 line += f"{format_time(min_time):>13}"
 
                 print(line)
                 line = ""
-    print(f"\n        TOTAL{format_time(total_avg_time):>13}{format_time(total_min_time):>13}")
-    print(f"         AVG {format_time(total_avg_time/parts_solved):>13}{format_time(total_min_time/parts_solved):>13}")
+
+    print(f"\n   TOTAL{format_time(total_avg_time):>13}{format_time(total_min_time):>13}")
+    if days_solved > 0:
+        print(f"    AVG {format_time(total_avg_time/days_solved):>13}{format_time(total_min_time/days_solved):>13}")
 
 
