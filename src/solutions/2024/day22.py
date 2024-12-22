@@ -8,9 +8,14 @@ YEAR = 2024
 
 def iterate(num, iters):
     for _ in range(iters):
-        num = (num ^ (num * 64)) % 16777216
-        num = (num ^ (num // 32))
-        num = (num ^ (num * 2048)) % 16777216
+        num = step(num)
+    return num
+
+
+def step(num):
+    num = (num ^ (num * 64)) & 0xffffff
+    num = (num ^ (num // 32))
+    num = (num ^ (num * 2048)) & 0xffffff
     return num
 
 
@@ -21,9 +26,7 @@ def get_best_sequence(nums):
         sequence = 0
         for i in range(2000):
             last_price = num % 10
-            num = (num ^ (num * 64)) % 16777216
-            num = (num ^ (num // 32))
-            num = (num ^ (num * 2048)) % 16777216
+            num = step(num)
             sequence = (sequence * 20 + (num % 10 - last_price)) % 20**4
             if i >= 3 and sequence not in seen:
                 seen.add(sequence)
