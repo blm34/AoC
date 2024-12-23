@@ -9,34 +9,19 @@ YEAR = 2024
 def product(string):
     pattern = r"mul\((\d{1,3}),(\d{1,3})\)"
     matches = re.findall(pattern, string)
-    result = 0
-    for match in matches:
-        result += int(match[0]) * int(match[1])
-    return result
-
-
-def p1(input_text):
-    return product(input_text)
-
-
-def p2(input_text):
-    pattern = r"mul\((\d{1,3}),(\d{1,3})\)|(do)\(\)|(don't)\(\)"
-    matches = re.findall(pattern, input_text)
-    result = 0
-    active = True
-    for match in matches:
-        if match[3] == "don't":
-            active = False
-        elif match[2] == "do":
-            active = True
-        elif active:
-            result += int(match[0]) * int(match[1])
-    return result
+    return sum(int(match[0]) * int(match[1])
+               for match in matches)
 
 
 @aoc_helper.communicator(YEAR, DAY)
 def solve(input_text):
-    return p1(input_text), p2(input_text)
+    p1 = product(input_text)
+
+    p2_string = re.sub(r"don't\(\).*?do\(\)", " ", input_text, flags=re.DOTALL)
+    p2_string = re.sub(r"don't\(\).*", "", p2_string, flags=re.DOTALL)
+    p2 = product(p2_string)
+
+    return p1, p2
 
 
 if __name__ == "__main__":
