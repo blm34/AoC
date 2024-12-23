@@ -19,8 +19,10 @@ def print_results(result: 'AocResult', year: int, day: int):
 
 
 def format_time(time: float) -> str:
-    if time > 3:
+    if time > 10:
         output = f"{time:.0f} s"
+    elif time > 3:
+        output = f"{time:.3f} s"
     elif time > 1:
         output = f"{1e3 * time:.0f} ms"
     elif time > 1e-3:
