@@ -60,7 +60,10 @@ def show_times(results, args):
             if results[year][day][0].p1_correct or results[year][day][0].p2_correct is True:
                 days_solved += 1
                 avg_time = sum(result.time for result in results[year][day]) / args.repeats
-                std_time = statistics.stdev(result.time for result in results[year][day])
+                if len(results[year][day]) > 1:
+                    std_time = statistics.stdev(result.time for result in results[year][day])
+                else:
+                    std_time = 0.
                 min_time = min(result.time for result in results[year][day])
                 median_time = statistics.median(result.time for result in results[year][day])
 
