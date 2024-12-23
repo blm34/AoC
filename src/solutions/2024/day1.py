@@ -1,4 +1,4 @@
-import re
+from collections import Counter
 
 import aoc_helper
 
@@ -7,42 +7,37 @@ YEAR = 2024
 
 
 def parse_input(input_text):
-    pattern = r"^(\d+)\s+(\d+)$"
-    matches = re.findall(pattern, input_text, re.MULTILINE)
     left, right = list(), list()
-    for a, b in matches:
+    for line in input_text.split("\n"):
+        a, b = line.split()
         left.append(int(a))
         right.append(int(b))
     return left, right
 
 
-def p1(input_text):
-    left, right = parse_input(input_text)
-
+def p1(left, right):
     left.sort()
     right.sort()
 
     distance = 0
-    for i in range(len(left)):
-        distance += abs(left[i] - right[i])
+    for left_num, right_num in zip(left, right):
+        distance += abs(left_num - right_num)
 
     return distance
 
 
-def p2(input_text):
-    left, right = parse_input(input_text)
+def p2(left, right):
+    left = Counter(left)
+    right = Counter(right)
 
-    similarity = 0
-    for num in left:
-        count = right.count(num)
-        similarity += num * count
-
-    return similarity
+    return sum(num * left[num] * right[num]
+               for num in left)
 
 
 @aoc_helper.communicator(YEAR, DAY)
 def solve(input_text):
-    return p1(input_text), p2(input_text)
+    left, right = parse_input(input_text)
+    return p1(left, right), p2(left, right)
 
 
 if __name__ == "__main__":
