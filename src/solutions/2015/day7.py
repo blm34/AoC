@@ -1,4 +1,5 @@
 from collections import deque
+from copy import deepcopy
 
 import aoc_helper
 
@@ -75,26 +76,16 @@ def run_instructions(Q):
     return calculated['a']
 
 
-def p1(input_text):
-    L = parse_input(input_text)
-    Q = get_instructions(L)
-    return run_instructions(Q)
-
-
-def p2(input_text):
-    L = parse_input(input_text)
-    Q = get_instructions(L)
-    for i in range(len(Q)):
-        if Q[i][3] == 'b':
-            p1_ans = p1().answer
-            Q[i][1] = [str(p1_ans)]
-            break
-    return run_instructions(Q)
-
-
 @aoc_helper.communicator(YEAR, DAY)
 def solve(input_text):
-    return p1(input_text), p2(input_text)
+    L = parse_input(input_text)
+    Q = get_instructions(L)
+    p1 = run_instructions(deepcopy(Q))
+    for i in range(len(Q)):
+        if Q[i][3] == 'b':
+            Q[i][1] = [str(p1)]
+            break
+    return p1, run_instructions(Q)
 
 
 if __name__ == "__main__":

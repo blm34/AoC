@@ -30,18 +30,12 @@ def valid(password):
 
 def pass_to_list(password):
     """Turn a password string into a list of numbers for each letter (1-26)"""
-    l = []
-    for char in password:
-        l.append(ord(char) - 96)
-    return l
+    return [ord(char) - 96 for char in password]
 
 
 def list_to_pass(l):
     """Turn a list of numbers back into a password"""
-    password = ''
-    for num in l:
-        password += chr(num + 96)
-    return password
+    return ''.join(chr(num + 96) for num in l)
 
 
 def increment(password):
@@ -62,25 +56,17 @@ def increment(password):
             return password
 
 
-def p1(input_text):
+@aoc_helper.communicator(YEAR, DAY)
+def solve(input_text):
     password = pass_to_list(input_text)
     while not valid(password):
         password = increment(password)
-    return list_to_pass(password)
-
-
-def p2(input_text):
-    p1_ans = p1().answer
-    password = pass_to_list(p1_ans)
+    p1 = list_to_pass(password)
     password = increment(password)
     while not valid(password):
         password = increment(password)
-    return list_to_pass(password)
-
-
-@aoc_helper.communicator(YEAR, DAY)
-def solve(input_text):
-    return p1(input_text), p2(input_text)
+    p2 = list_to_pass(password)
+    return p1, p2
 
 
 if __name__ == "__main__":
