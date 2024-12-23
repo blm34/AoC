@@ -1,5 +1,3 @@
-import re
-
 import aoc_helper
 
 DAY = None
@@ -7,34 +5,25 @@ YEAR = 2024
 
 
 def parse_input(input_text):
-    L = input_text.split('\n')
-    G = [list(line) for line in L]
-    R = len(G)
-    C = len(G[0])
+    lines = input_text.split('\n')
+    grid = [list(line) for line in lines]
+    R = len(grid)
+    C = len(grid[0])
     return None
 
 
-@aoc_helper.communicator(YEAR, DAY, 1)
-def p1(input_text):
-    L = input_text.split('\n')
-    G = [list(line) for line in L]
-    R = len(G)
-    C = len(G[0])
+@aoc_helper.communicator(YEAR, DAY)
+def solve(input_text):
+    lines = input_text.split('\n')
+    grid = [list(line) for line in lines]
+    R = len(grid)
+    C = len(grid[0])
     x = parse_input(input_text)
+    p1, p2 = None, None
 
-
-@aoc_helper.communicator(YEAR, DAY, 2)
-def p2(input_text):
-    L = input_text.split('\n')
-    G = [list(line) for line in L]
-    R = len(G)
-    C = len(G[0])
-    x = parse_input(input_text)
+    return p1, p2
 
 
 if __name__ == "__main__":
-    p1_res = p1()
-    aoc_helper.print_results(p1_res, part=1)
-
-    p2_res = p2()
-    aoc_helper.print_results(p2_res, part=2)
+    result = solve()
+    aoc_helper.print_results(result, YEAR, DAY)
