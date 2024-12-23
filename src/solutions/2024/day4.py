@@ -4,52 +4,38 @@ DAY = 4
 YEAR = 2024
 
 
-def p1(input_text):
-    L = input_text.split('\n')
-    G = [list(line) for line in L]
-    R = len(G)
-    C = len(G[0])
+@aoc_helper.communicator(YEAR, DAY)
+def solve(input_text):
+    grid = input_text.split("\n")
+    R = len(grid)
+    C = len(grid[0])
 
-    count = 0
+    p1 = 0
+    # Check horizontal
     for r in range(R):
         for c in range(C):
-            if G[r][c] != 'X':
-                continue
-            for dr in (-1, 0, 1):
-                for dc in (-1, 0, 1):
+            if grid[r][c] == 'X':
+                for dr, dc in ((-1, -1), (-1, 0), (-1, 1), (0, -1), (0, 1), (1, -1), (1, 0), (1, 1)):
                     rr, cc = r, c
                     found = True
                     for letter in 'MAS':
                         rr += dr
                         cc += dc
-                        if not (0 <= rr < R and 0 <= cc < C) or \
-                                G[rr][cc] != letter:
+                        if not (0 <= rr < R and 0 <= cc < C) or grid[rr][cc] != letter:
                             found = False
                             break
-                    count += found
-    return count
+                    p1 += found
 
-
-def p2(input_text):
-    L = input_text.split('\n')
-    G = [list(line) for line in L]
-    R = len(G)
-    C = len(G[0])
-
-    count = 0
+    # Part 2
+    p2 = 0
     for r in range(1, R-1):
         for c in range(1, C-1):
-            if G[r][c] != 'A':
-                continue
-            corners = [G[r+dr][c+dc] for dr in (-1, 1) for dc in (-1, 1)]
-            if 2 == corners.count('M') == corners.count('S') and corners[0] != corners[3]:
-                count += 1
-    return count
+            if grid[r][c] == 'A':
+                if abs(ord(grid[r-1][c-1]) - ord(grid[r+1][c+1])) == 6 and \
+                        abs(ord(grid[r-1][c+1]) - ord(grid[r+1][c-1])) == 6:
+                    p2 += 1
 
-
-@aoc_helper.communicator(YEAR, DAY)
-def solve(input_text):
-    return p1(input_text), p2(input_text)
+    return p1, p2
 
 
 if __name__ == "__main__":
