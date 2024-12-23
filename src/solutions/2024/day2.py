@@ -5,21 +5,8 @@ YEAR = 2024
 
 
 def parse_input(input_text):
-    L = input_text.split('\n')
-    G = [[int(num) for num in line.split()] for line in L]
-    return G
-
-
-def p1(input_text):
-    reports = parse_input(input_text)
-    return sum(safe(report) for report in reports)
-
-
-def p2(input_text):
-    reports = parse_input(input_text)
-    return sum(any(safe(report[:i] + report[i+1:])
-                   for i in range(len(report) + 1))
-               for report in reports)
+    return [tuple(map(int, line.split()))
+            for line in input_text.split("\n")]
 
 
 def safe(report):
@@ -31,7 +18,14 @@ def safe(report):
 
 @aoc_helper.communicator(YEAR, DAY)
 def solve(input_text):
-    return p1(input_text), p2(input_text)
+    reports = parse_input(input_text)
+
+    p1 = sum(safe(report) for report in reports)
+    p2 = sum(any(safe(report[:i] + report[i+1:])
+                 for i in range(len(report)))
+             for report in reports)
+
+    return p1, p2
 
 
 if __name__ == "__main__":
