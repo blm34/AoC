@@ -1,56 +1,63 @@
-import re
-
 import aoc_helper
-from aoc_helper import digit_count
 
 DAY = 7
 YEAR = 2024
 
 
 def parse_input(input_text):
-    L = input_text.split('\n')
     equations = list()
-    for line in L:
-        match = re.match(r"(\d+):((\s\d+){2,})", line)
-        result = int(match.group(1))
-        operands = tuple(map(int, match.group(2).split()))
-        equations.append((result, operands))
+    for line in input_text.splitlines():
+        result, operands = line.split(": ")
+        operands = tuple(map(int, operands.split()))
+        equations.append((int(result), operands))
     return equations
 
 
-def valid(target, nums, p2=False):
+def valid(target, nums):
+    """
+    Returns:
+        0: if not valid in either part
+        1: if valid in parts 1 and 2
+        2: if valid in only part 2
+    """
     if len(nums) == 1:
         return target == nums[0]
-    v = valid(target - nums[-1], nums[:-1], p2)
-    v = v or (target % nums[-1] == 0 and valid(target // nums[-1], nums[:-1], p2))
-    if p2:
-        digits = digit_count(nums[-1])
-        if target % (10**digits) == nums[-1]:
-            v = v or valid(target//(10**digits), nums[:-1], p2)
-    return v
 
+    add = valid(target - nums[-1], nums[:-1])
+    if add == 1:
+        return 1
 
-def p1(input_text):
-    equations = parse_input(input_text)
-    result = 0
-    for equation in equations:
-        if valid(*equation):
-            result += equation[0]
-    return result
+    mult = target % nums[-1] == 0 and valid(target // nums[-1], nums[:-1])
+    if mult == 1:
+        return 1
 
+    if add == 2 or mult == 2:
+        return 2
 
-def p2(input_text):
-    equations = parse_input(input_text)
-    result = 0
-    for equation in equations:
-        if valid(*equation, p2=True):
-            result += equation[0]
-    return result
+    digits = aoc_helper.digit_count(nums[-1])
+    concat = target % (10**digits) == nums[-1] and valid(target // (10**digits), nums[:-1])
+    if concat:
+        return 2
+
+    return 0
 
 
 @aoc_helper.communicator(YEAR, DAY)
 def solve(input_text):
-    return p1(input_text), p2(input_text)
+    equations = parse_input(input_text)
+    
+    p1 = 0
+    p2 = 0
+
+    for equation in equations:
+        v = valid(*equation)
+        if v == 1:
+            p1 += equation[0]
+            p2 += equation[0]
+        elif v == 2:
+            p2 += equation[0]
+
+    return p1, p2
 
 
 if __name__ == "__main__":
