@@ -3,6 +3,9 @@ import aoc_helper
 DAY = 25
 YEAR = 2024
 
+width = 5
+height = 7
+
 
 def parse_input(input_text):
     items = input_text.split("\n\n")
@@ -11,48 +14,29 @@ def parse_input(input_text):
     locks = []
 
     for item in items:
-        lines = item.splitlines()
-        if item[0][0] == "#":
-            # Lock
-            lock = []
-            for c in range(len(lines[0])):
-                height = 0
-                for r in range(1, len(lines)):
-                    if lines[r][c] == "#":
-                        height += 1
-                    else:
-                        break
-                lock.append(height)
-            locks.append(lock)
+        # Encode keys/locks in binary where 1 represents a `#` and 0 a `.`
+        #  As valid if no overlapping #'s, valid if key bitwise and lock is 0
+        value = 0
+        for char in item[width:-width]:
+            if char == "\n":
+                continue
+            if char == "#":
+                value += 1
+            value *= 2
 
+        if item[0] == "#":
+            locks.append(value)
         else:
-            # Key
-            key = []
-            for c in range(len(lines[0])):
-                height = 0
-                for r in range(len(lines) - 2, 0, -1):
-                    if lines[r][c] == "#":
-                        height += 1
-                    else:
-                        break
-                key.append(height)
-            keys.append(key)
+            keys.append(value)
 
     return locks, keys
-
-
-def fit(lock, key):
-    for c in range(len(lock)):
-        if lock[c] + key[c] > 5:
-            return False
-    return True
 
 
 @aoc_helper.communicator(YEAR, DAY)
 def solve(input_text):
     locks, keys = parse_input(input_text)
 
-    valid = sum(fit(lock, key)
+    valid = sum(lock & key == 0
                 for key in keys
                 for lock in locks)
 
