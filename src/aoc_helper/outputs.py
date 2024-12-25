@@ -12,8 +12,9 @@ def print_results(result: 'AocResult', year: int, day: int):
     output += " (/) " if result.p1_correct else " (X) "
     output += f"Run time: {format_time(result.time)}"
 
-    output += f"\n        Part 2: {p2_ans:<20}"
-    output += " (/) " if result.p2_correct else " (X) "
+    if day != 25:
+        output += f"\n        Part 2: {p2_ans:<20}"
+        output += " (/) " if result.p2_correct else " (X) "
 
     print(output)
 
