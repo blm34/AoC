@@ -9,123 +9,121 @@ DIRECTIONS = [(-1, 0),
               (0, -1)]
 
 
-def get_start(G):
-    for r in range(len(G)):
-        if '^' in G[r]:
-            guard_r = r
-            guard_c = G[r].index('^')
-            return guard_r, guard_c
+def get_start(grid):
+    for r in range(len(grid)):
+        if '^' in grid[r]:
+            return r, grid[r].index("^")
 
 
-def get_visited(G):
-    R = len(G)
-    C = len(G[0])
+def original_path(grid):
+    height = len(grid)
+    width = len(grid[0])
 
-    guard_r, guard_c = get_start(G)
+    r, c = get_start(grid)
+    d = 0
+    dr, dc = DIRECTIONS[d]
 
-    direction_index = 0
+    yield r, c, d
 
-    visited = set()
-    while 0 <= guard_r < R and 0 <= guard_c < C:
-        visited.add((guard_r, guard_c))
-
-        for _ in range(2):
-            dr, dc = DIRECTIONS[direction_index]
-            if 0 <= guard_r + dr < R and 0 <= guard_c + dc < C:
-                if G[guard_r + dr][guard_c + dc] == '#':
-                    direction_index = (direction_index + 1) % 4
-                else:
-                    break
-            else:
-                break
-
-        dr, dc = DIRECTIONS[direction_index]
-        guard_r += dr
-        guard_c += dc
-
-    return visited
+    while 0 <= r + dr < height and 0 <= c + dc < width:
+        if  grid[r+dr][c+dc] == "#":
+            d = (d+1) % 4
+            dr, dc = DIRECTIONS[d]
+        else:
+            r += dr
+            c += dc
+            yield r, c, d
 
 
-def p1(input_text):
-    G = input_text.split('\n')
+def get_jumps(grid) -> list[list[list[tuple[int, int, int]]]]:
+    height = len(grid)
+    width = len(grid[0])
+    jumps = [[[None for direction in range(4)] for c in range(width)] for r in range(height)]
 
-    visited = get_visited(G)
-    return len(visited)
+    # Find index for each obstacle in each row and col
+    rows = [[] for _ in range(height)]
+    cols = [[] for _ in range(width)]
 
+    for r in range(height):
+        for c in range(width):
+            if grid[r][c] == "#":
+                rows[r].append(c)
+                cols[c].append(r)
 
-def get_jumps(G) -> list[list[list[tuple[int, int]]]]:
-    R = len(G)
-    C = len(G[0])
-    jumps = [[[(None, None) for direction in range(4)] for c in range(C)] for r in range(R)]
+    # Calculate jumps in each row
+    for r in range(height):
+        for obs1, obs2 in zip([-2] + rows[r], rows[r] + [width + 1]):
+            for c in range(max(0, obs1 + 1), min(width, obs2)):
+                jumps[r][c][1] = (r, obs2 - 1, 2)
+                jumps[r][c][3] = (r, obs1 + 1, 0)
 
-    for r in range(R):
-        for c in range(C):
-            for d in range(4):
-                guard_r, guard_c = r, c
-                while True:
-                    dr, dc = DIRECTIONS[d]
-                    if 0 <= guard_r + dr < R and 0 <= guard_c + dc < C:
-                        if G[guard_r + dr][guard_c + dc] == '#':
-                            jumps[r][c][d] = (guard_r, guard_c)
-                            break
-                    else:
-                        jumps[r][c][d] = (guard_r + dr, guard_c + dc)
-                        break
+    # Calculate jumps in each col
+    for c in range(width):
+        for obs1, obs2 in zip([-2] + cols[c], cols[c] + [height + 1]):
+            for r in range(max(0, obs1 + 1), min(height, obs2)):
+                jumps[r][c][0] = (obs1 + 1, c, 1)
+                jumps[r][c][2] = (obs2 - 1, c, 3)
 
-                    guard_r += dr
-                    guard_c += dc
     return jumps
 
 
-def p2(input_text):
-    G = input_text.split('\n')
-    R = len(G)
-    C = len(G[0])
+def loop_finder(jumps, guard_r, guard_c, guard_d, obs_r, obs_c, height, width):
+    visited = set()
 
-    path = get_visited(G)
-    start_r, start_c = get_start(G)
+    while 0 <= guard_r < height and 0 <= guard_c < width:
+        if guard_d == 0:
+            if (guard_r, guard_c) in visited:
+                return 1
+            visited.add((guard_r, guard_c))
 
-    next_pos = get_jumps(G)
+        next_r, next_c, guard_d = jumps[guard_r][guard_c][guard_d]
 
-    loops = 0
-    for r_obstacle, c_obstacle in path - {(start_r, start_c)}:
-        guard_r, guard_c = start_r, start_c
-        direction_index = 0
+        if obs_r == guard_r == next_r:
+            if next_c <= obs_c < guard_c:
+                guard_c = obs_c + 1
+            elif guard_c < obs_c <= next_c:
+                guard_c = obs_c - 1
+            else:
+                guard_r = next_r
+                guard_c = next_c
 
-        visited = set()
-        first_move = True
-        while 0 <= guard_r < R and 0 <= guard_c < C:
-            if (guard_r, guard_c, direction_index) in visited:
-                loops += 1
-                break
+        elif obs_c == guard_c == next_c:
+            if next_r <= obs_r < guard_r:
+                guard_r = obs_r + 1
+            elif guard_r < obs_r <= next_r:
+                guard_r = obs_r - 1
+            else:
+                guard_r = next_r
+                guard_c = next_c
 
-            if not first_move:
-                visited.add((guard_r, guard_c, direction_index))
-                direction_index = (direction_index + 1) % 4
-            first_move = False
-            next_r, next_c = next_pos[guard_r][guard_c][direction_index]
+        else:
+            guard_r = next_r
+            guard_c = next_c
 
-            if guard_r == next_r:
-                if guard_r == r_obstacle and next_c <= c_obstacle < guard_c:
-                    guard_c = c_obstacle + 1
-                elif guard_r == r_obstacle and guard_c < c_obstacle <= next_c:
-                    guard_c = c_obstacle - 1
-                else:
-                    guard_c = next_c
-
-            elif guard_c == next_c:
-                if guard_c == c_obstacle and next_r <= r_obstacle < guard_r:
-                    guard_r = r_obstacle + 1
-                elif guard_c == c_obstacle and guard_r < r_obstacle <= next_r:
-                    guard_r = r_obstacle - 1
-                else:
-                    guard_r = next_r
-    return loops
+    return 0
 
 
 @aoc_helper.communicator(YEAR, DAY)
 def solve(input_text):
-    return p1(input_text), p2(input_text)
+    grid = input_text.splitlines()
+    height = len(grid)
+    width = len(grid[0])
+
+    jumps = get_jumps(grid)
+
+    original_path_generator = original_path(grid)
+    prev_r, prev_c, prev_d = next(original_path_generator)
+
+    p1_path = {(prev_r, prev_c)}
+    loops = 0
+
+    for guard_r, guard_c, guard_d in original_path_generator:
+        if (guard_r, guard_c) not in p1_path:
+            p1_path.add((guard_r, guard_c))
+            loops += loop_finder(jumps, prev_r, prev_c, prev_d, guard_r, guard_c, height, width)
+        prev_r, prev_c, prev_d = guard_r, guard_c, guard_d
+
+    return len(p1_path), loops
 
 
 if __name__ == "__main__":
