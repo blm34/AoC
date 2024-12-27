@@ -1,5 +1,3 @@
-import re
-
 import aoc_helper
 
 DAY = 13
@@ -9,17 +7,13 @@ YEAR = 2024
 def parse_input(input_text):
     turns_text = input_text.split('\n\n')
     turns = []
-    move_pattern = r"^Button (A|B): X\+(\d+), Y\+(\d+)$"
-    target_pattern = r"^Prize: X=(\d+), Y=(\d+)$"
     for turn_test in turns_text:
         turn = []
-        lines = turn_test.split("\n")
-        match = re.match(move_pattern, lines[0])
-        turn.append(tuple(map(int, match.groups()[1:])))
-        match = re.match(move_pattern, lines[1])
-        turn.append(tuple(map(int, match.groups()[1:])))
-        match = re.match(target_pattern, lines[2])
-        turn.append(tuple(map(int, match.groups())))
+        lines = turn_test.splitlines()
+        for i, line in enumerate(lines):
+            _, line = line.split(": ")
+            first, second = line.split(", ")
+            turn.append([int(first[2:]), int(second[2:])])
         turns.append(turn)
     return turns
 
@@ -34,27 +28,23 @@ def min_tokens(da, db, target):
         return 0, 0
 
 
-def p1(input_text):
-    turns = parse_input(input_text)
-    tokens = 0
-    for turn in turns:
-        a, b = min_tokens(*turn)
-        tokens += 3*a + b
-    return tokens
-
-
-def p2(input_text):
-    turns = parse_input(input_text)
-    tokens = 0
-    for turn in turns:
-        turn[2] = (turn[2][0]+10_000_000_000_000, turn[2][1]+10_000_000_000_000)
-        a, b = min_tokens(*turn)
-        tokens += 3*a + b
-    return tokens
-
 @aoc_helper.communicator(YEAR, DAY)
 def solve(input_text):
-    return p1(input_text), p2(input_text)
+    turns = parse_input(input_text)
+
+    p1 = 0
+    p2 = 0
+
+    for turn in turns:
+        a, b = min_tokens(*turn)
+        p1 += 3*a + b
+
+        turn[2][0] += 10_000_000_000_000
+        turn[2][1] += 10_000_000_000_000
+        a, b = min_tokens(*turn)
+        p2 += 3*a + b
+
+    return p1, p2
 
 if __name__ == "__main__":
     result = solve()
