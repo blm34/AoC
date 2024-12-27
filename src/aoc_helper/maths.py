@@ -57,7 +57,21 @@ def digit_count(num: int) -> int:
     Returns:
         The number of digits in num
     """
+    if num == 1:
+        return 1
+
     d = 1
     while 10 ** d <= num:
-        d += 1
-    return d
+        d *= 2
+
+    min_d = d // 2
+    max_d = d
+
+    while min_d != max_d:
+        mid_d = (min_d + max_d) // 2
+        if 10 ** mid_d <= num:
+            min_d = mid_d + 1
+        else:
+            max_d = mid_d
+
+    return min_d
