@@ -8,6 +8,7 @@ core_directions = [(-1, 0),
                    (0, 1),
                    (1, 0),
                    (0, -1)]
+
 # Encode the ability to move in each of the 4 directions in one bit of a four bit integer
 directions = [[] for _ in range(16)]
 for i in range(16):
@@ -17,8 +18,7 @@ for i in range(16):
 
 
 def parse_input(input_text):
-    lines = input_text.split('\n')
-    topography = [list(map(int, line)) for line in lines]
+    topography = [[int(num) for num in line] for line in input_text.splitlines()]
     R = len(topography)
     C = len(topography[0])
 
@@ -31,49 +31,33 @@ def parse_input(input_text):
             for i, (dr, dc) in enumerate(core_directions):
                 rr = r + dr
                 cc = c + dc
-                if 0 <= rr < R and 0 <= cc < C:
-                    if topography[r][c] + 1 == topography[rr][cc]:
-                        moves[r][c] |= 2**i
+                if 0 <= rr < R and 0 <= cc < C and \
+                        topography[r][c] + 1 == topography[rr][cc]:
+                    moves[r][c] += 2**i
     return zeros, moves
-
-
-def p1(input_text):
-    zeros, moves = parse_input(input_text)
-
-    total = 0
-    for r_zero, c_zero in zeros:
-        stack = [(0, r_zero, c_zero)]
-        seen = set()
-        while stack:
-            height, r, c = stack.pop()
-            if height == 9:
-                total += 1
-            for dr, dc in directions[moves[r][c]]:
-                if (r + dr, c + dc) not in seen:
-                    seen.add((r+dr, c+dc))
-                    stack.append((height+1, r+dr, c+dc))
-
-    return total
-
-
-def p2(input_text):
-    zeros, moves = parse_input(input_text)
-
-    total = 0
-    for r_zero, c_zero in zeros:
-        stack = [(0, r_zero, c_zero)]
-        while stack:
-            height, r, c = stack.pop()
-            if height == 9:
-                total += 1
-            for dr, dc in directions[moves[r][c]]:
-                stack.append((height+1, r+dr, c+dc))
-    return total
 
 
 @aoc_helper.communicator(YEAR, DAY)
 def solve(input_text):
-    return p1(input_text), p2(input_text)
+    zeros, moves = parse_input(input_text)
+
+    p1 = 0
+    p2 = 0
+
+    for r_zero, c_zero in zeros:
+        stack = [(0, r_zero, c_zero)]
+        ends_seen = set()
+        while stack:
+            height, r, c = stack.pop()
+            if height == 9:
+                p2 += 1
+                if (r, c) not in ends_seen:
+                    p1 += 1
+                    ends_seen.add((r, c))
+            for dr, dc in directions[moves[r][c]]:
+                stack.append((height+1, r+dr, c+dc))
+
+    return p1, p2
 
 
 if __name__ == "__main__":
