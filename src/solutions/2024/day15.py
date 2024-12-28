@@ -42,8 +42,6 @@ def make_move(grid, move, robot):
         grid[rob_r+dr][rob_c+dc] = "."
         return grid, (rob_r + dr, rob_c + dc)
 
-# 2028
-
 
 def make_move_p2(grid, move, robot):
     rob_r, rob_c = robot
@@ -53,49 +51,38 @@ def make_move_p2(grid, move, robot):
     if grid[rr][cc] == "#":
         return grid, robot
     elif grid[rr][cc] == ".":
-        grid[rr][cc] = "@"
-        grid[rob_r][rob_c] = "."
-        return grid, (rob_r + dr, rob_c + dc)
-    else:
-        if dr == 0:  # Horizontal move with box
-            while True:
-                if grid[rr][cc] == "#":
-                    return grid, robot
-                elif grid[rr][cc] == "[" or grid[rr][cc] == "]":
-                    rr += dr
-                    cc += dc
-                elif grid[rr][cc] == ".":
-                    r = rr
-                    c = cc
-                    while not (r == rob_r and c == rob_c):
-                        grid[r][c] = grid[r - dr][c - dc]
-                        r -= dr
-                        c -= dc
-                    grid[rob_r][rob_c] = '.'
-                    return grid, (rob_r + dr, rob_c + dc)
-        else:  # Vertical move with box
-            # Calculate what needs to move
-            to_move = set()
-            stack = [(rob_r, rob_c)]
-            while stack:
-                r, c = stack.pop()
-                if grid[r][c] == "#":
-                    return grid, robot
-                elif grid[r][c] == ".":
-                    continue
-                to_move.add((r, c))
-                stack.append((r + dr, c))
-                if grid[r+dr][c] == "[":
-                    stack.append((r + dr, c + 1))
-                elif grid[r+dr][c] == "]":
-                    stack.append((r + dr, c - 1))
-                elif grid[r+dr][c] == "#":
-                    return grid, robot
-            # Make the moves
-            to_move = sorted(to_move, reverse=dr==1)
-            for r, c in to_move:
-                grid[r][c], grid[r+dr][c] = grid[r+dr][c], grid[r][c]
-            return grid, (rob_r+dr, rob_c)
+        return grid, (rr, cc)
+    elif dr == 0:  # Horizontal move with box
+        while grid[rr][cc] == "[" or grid[rr][cc] == "]":
+            cc += dc
+        if grid[rr][cc] == "#":
+            return grid, robot
+        elif grid[rr][cc] == ".":
+            for c in range(cc, rob_c, -dc):
+                grid[rob_r][c] = grid[rob_r][c - dc]
+            grid[rob_r][rob_c] = '.'
+            return grid, (rob_r, rob_c + dc)
+    else:  # Vertical move with box
+        # Calculate what needs to move
+        to_move = set()
+        stack = [robot]
+        while stack:
+            r, c = stack.pop()
+            if grid[r][c] == "." and r != rob_r:
+                continue
+            to_move.add((r, c))
+            stack.append((r + dr, c))
+            if grid[r+dr][c] == "[":
+                stack.append((r + dr, c + 1))
+            elif grid[r+dr][c] == "]":
+                stack.append((r + dr, c - 1))
+            elif grid[r+dr][c] == "#":
+                return grid, robot
+        # Make the moves
+        to_move = sorted(to_move, reverse=dr==1)
+        for r, c in to_move:
+            grid[r][c], grid[r+dr][c] = grid[r+dr][c], grid[r][c]
+        return grid, (rob_r+dr, rob_c)
 
 
 def gps_score(grid):
